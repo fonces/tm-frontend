@@ -9,6 +9,20 @@ const reducer = (state: State, action: ActionType) => {
         origin: { ...action.payload.byId },
         byId: { ...action.payload.byId },
       }
+    case 'UPDATE': {
+      const { id, user } = action.payload
+      return {
+        ...state,
+        origin: { ...state.byId },
+        byId: {
+          ...state.byId,
+          [id]: {
+            ...state.byId[id],
+            ...user,
+          },
+        },
+      }
+    }
     default:
       return state
   }

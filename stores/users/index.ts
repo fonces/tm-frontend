@@ -1,7 +1,6 @@
-
 import { useContext } from 'react'
 import { UserRow } from '@/api/users/GET'
-import { UserById } from './types'
+import { User, UserById } from './types'
 import { Context } from './context'
 import selector from './selector'
 import actions from './actions'
@@ -27,9 +26,12 @@ const setUsers = () => {
     ))
   }
 
+  const updateUser = (user: User) => dispatch(actions.updateUser(user.id, user))
+
   return {
     ...selector(state),
     setUsers,
+    updateUser,
   }
 }
 
