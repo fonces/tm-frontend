@@ -1,33 +1,44 @@
 import { useContext } from 'react'
+import { createStorageManager } from '@/utils/storage'
 import { UserRow } from '@/api/users/GET'
 import { User, UserById } from './types'
-import { Context } from './context'
+import { initialState, Context } from './context'
 import selector from './selector'
 import actions from './actions'
 
-const setUsers = () => {
+const { loadStorage, saveStorage } = createStorageManager('users', initialState)
+const filterData = (usersById: UserById) => (
+  Object
+    .values(usersById)
+    .reduce<{ [key: string ]: Pick<User, 'entry'> }>((acc, { id, entry }) => ({
+      ...acc,
+      [id]: { entry },
+    }), {})
+)
+
+const useUsers = () => {
   const { state, dispatch } = useContext(Context)
   const { users, ids, byId } = selector(state)
 
   const setUsers = (response: UserRow[]) => {
-    dispatch(actions.setUsers(
-      response.reduce<UserById>((acc, { teamId, userId, userName }) => (
-        acc[userId]
-          ? acc
-          : {
-              ...acc,
-              [userId]: {
-                id: userId,
-                teamId: teamId,
-                name: userName,
-                entry: false,
-              },
-            }
-      ), {}),
-    ))
+    const storageData = loadStorage()
+    const usersById = response.reduce<UserById>((acc, { teamId, userId, userName }) => ({
+      ...acc,
+      [userId]: {
+        id: userId,
+        teamId: teamId,
+        name: userName,
+        entry: (storageData || {})[userId]?.entry || false,
+      },
+    }), {})
+    dispatch(actions.setUsers(usersById))
+    saveStorage(filterData(usersById))
   }
 
-  const updateUser = (user: User) => dispatch(actions.updateUser(user.id, user))
+  const updateUser = (user: User) => {
+    dispatch(actions.updateUser(user.id, user))
+    saveStorage(filterData({ ...byId, [user.id]: user }))
+  }
 
   const isSelectedUsers = users.some(({ entry }) => entry)
 
@@ -41,5 +52,5 @@ const setUsers = () => {
   }
 }
 
-export default setUsers
+export default useUsers
 export { Provider } from './context'

@@ -3,6 +3,7 @@ import getUsers from '@/api/users/GET'
 import useStep from '@/hooks/step'
 import useTeams, { Provider as TeamsProvider } from '@/stores/teams'
 import useUsers, { Provider as UsersProvider } from '@/stores/users'
+import useSettings, { Provider as SettingsProvider } from '@/stores/settings'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Stepper from '@material-ui/core/Stepper'
 import Step from '@material-ui/core/Step'
@@ -13,22 +14,22 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import StepTeam from '@/components/Steps/Team'
 import StepDice from '@/components/Steps/Dice'
+import StepOther from '@/components/Steps/Other'
 
 const useStyles = makeStyles((theme: Theme) => (
   createStyles({
     root: {
       width: '100%',
     },
-    button: {
-      marginTop: theme.spacing(1),
-      marginRight: theme.spacing(1),
+    title: {
+      marginTop: theme.spacing(3),
+      marginLeft: theme.spacing(3),
     },
     actionsContainer: {
       display: 'flex',
       justifyContent: 'space-between',
       flexDirection: 'row-reverse',
       marginTop: theme.spacing(2),
-      marginBottom: theme.spacing(2),
     },
     resetContainer: {
       padding: theme.spacing(3),
@@ -39,10 +40,12 @@ const useStyles = makeStyles((theme: Theme) => (
 const Index = () => {
   const classes = useStyles()
   const { activeStep, onNext, onBack, onReset } = useStep()
-  const { setTeams, isAllSettedDice } = useTeams()
+  const { setTeams } = useTeams()
   const { setUsers, isSelectedUsers } = useUsers()
+  const { loadSettings } = useSettings()
 
   useEffect(() => {
+    loadSettings()
     getUsers().then(users => {
       setTeams(users)
       setUsers(users)
@@ -51,21 +54,19 @@ const Index = () => {
 
   return (
     <div className={classes.root}>
+      <Typography variant="h5" className={classes.title}>卓リスト作成</Typography>
       <Stepper activeStep={activeStep} orientation="vertical">
           <Step>
             <StepLabel>参加ユーザー設定</StepLabel>
             <StepContent>
               <StepTeam />
               <div className={classes.actionsContainer}>
-                <div>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    disabled={!isSelectedUsers}
-                    onClick={onNext}
-                    className={classes.button}
-                  >次へ</Button>
-                </div>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  disabled={!isSelectedUsers}
+                  onClick={onNext}
+                >次へ</Button>
               </div>
             </StepContent>
           </Step>
@@ -77,28 +78,24 @@ const Index = () => {
                 <Button
                   variant="contained"
                   color="primary"
-                  disabled={!isAllSettedDice}
+                  // disabled={!isAllSettedDice}
                   onClick={onNext}
-                  className={classes.button}
                 >次へ</Button>
-                <Button onClick={onBack} variant="outlined" className={classes.button}>前へ</Button>
+                <Button onClick={onBack} variant="outlined">前へ</Button>
               </div>
             </StepContent>
           </Step>
           <Step>
             <StepLabel>詳細設定</StepLabel>
             <StepContent>
-              優先的に作成する卓を選択してください
+              <StepOther />
               <div className={classes.actionsContainer}>
-                <div>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={onNext}
-                    className={classes.button}
-                  >次へ</Button>
-                  <Button onClick={onBack} variant="outlined" className={classes.button}>前へ</Button>
-                </div>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={onNext}
+                >次へ</Button>
+                <Button onClick={onBack} variant="outlined">前へ</Button>
               </div>
             </StepContent>
           </Step>
@@ -107,15 +104,12 @@ const Index = () => {
             <StepContent>
               confirm
               <div className={classes.actionsContainer}>
-                <div>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={onNext}
-                    className={classes.button}
-                  >作成</Button>
-                  <Button onClick={onBack} variant="outlined" className={classes.button}>前へ</Button>
-                </div>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={onNext}
+                >作成</Button>
+                <Button onClick={onBack} variant="outlined">修正</Button>
               </div>
             </StepContent>
           </Step>
@@ -123,7 +117,7 @@ const Index = () => {
       {activeStep === 4 && (
         <Paper square elevation={0} className={classes.resetContainer}>
           <Typography>卓の作成が完了しました。</Typography>
-          <Button onClick={onReset} variant="outlined" className={classes.button}>リセット</Button>
+          <Button onClick={onReset} variant="outlined">リセット</Button>
         </Paper>
       )}
     </div>
@@ -131,11 +125,13 @@ const Index = () => {
 }
 
 const EnhanceIndex = () => (
-  <TeamsProvider>
-    <UsersProvider>
-      <Index />
-    </UsersProvider>
-  </TeamsProvider>
+  <SettingsProvider>
+    <TeamsProvider>
+      <UsersProvider>
+        <Index />
+      </UsersProvider>
+    </TeamsProvider>
+  </SettingsProvider>
 )
 
 export default EnhanceIndex
