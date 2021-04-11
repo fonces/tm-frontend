@@ -12,6 +12,7 @@ import Button from '@material-ui/core/Button'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import StepTeam from '@/components/Steps/Team'
+import StepDice from '@/components/Steps/Dice'
 
 const useStyles = makeStyles((theme: Theme) => (
   createStyles({
@@ -23,6 +24,10 @@ const useStyles = makeStyles((theme: Theme) => (
       marginRight: theme.spacing(1),
     },
     actionsContainer: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      flexDirection: 'row-reverse',
+      marginTop: theme.spacing(2),
       marginBottom: theme.spacing(2),
     },
     resetContainer: {
@@ -31,31 +36,11 @@ const useStyles = makeStyles((theme: Theme) => (
   })
 ))
 
-function getSteps () {
-  return ['参加ユーザー設定', 'ダイス値入力', '優先卓設定', '確認']
-}
-
-function getStepContent (step: number) {
-  switch (step) {
-    case 0:
-      return <StepTeam />
-    case 1:
-      return '各チームのダイスの値を入力してください'
-    case 2:
-      return '優先的に作成する卓を選択してください'
-    case 3:
-      return '作成しますか？'
-    default:
-      return 'Unknown step'
-  }
-}
-
 const Index = () => {
   const classes = useStyles()
-  const steps = getSteps()
   const { activeStep, onNext, onBack, onReset } = useStep()
-  const { setTeams } = useTeams()
-  const { setUsers } = useUsers()
+  const { setTeams, isAllSettedDice } = useTeams()
+  const { setUsers, isSelectedUsers } = useUsers()
 
   useEffect(() => {
     getUsers().then(users => {
@@ -67,29 +52,75 @@ const Index = () => {
   return (
     <div className={classes.root}>
       <Stepper activeStep={activeStep} orientation="vertical">
-        {steps.map((label, index) => (
-          <Step key={label}>
-            <StepLabel>{label}</StepLabel>
+          <Step>
+            <StepLabel>参加ユーザー設定</StepLabel>
             <StepContent>
-              <Typography>{getStepContent(index)}</Typography>
+              <StepTeam />
               <div className={classes.actionsContainer}>
                 <div>
-                  {activeStep !== 0 && <Button onClick={onBack} variant="outlined" className={classes.button}>前へ</Button>}
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    disabled={!isSelectedUsers}
+                    onClick={onNext}
+                    className={classes.button}
+                  >次へ</Button>
+                </div>
+              </div>
+            </StepContent>
+          </Step>
+          <Step>
+            <StepLabel>ダイス値入力</StepLabel>
+            <StepContent>
+              <StepDice />
+              <div className={classes.actionsContainer}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  disabled={!isAllSettedDice}
+                  onClick={onNext}
+                  className={classes.button}
+                >次へ</Button>
+                <Button onClick={onBack} variant="outlined" className={classes.button}>前へ</Button>
+              </div>
+            </StepContent>
+          </Step>
+          <Step>
+            <StepLabel>詳細設定</StepLabel>
+            <StepContent>
+              優先的に作成する卓を選択してください
+              <div className={classes.actionsContainer}>
+                <div>
                   <Button
                     variant="contained"
                     color="primary"
                     onClick={onNext}
                     className={classes.button}
-                  >
-                    {activeStep === steps.length - 1 ? '作成' : '次へ'}
-                  </Button>
+                  >次へ</Button>
+                  <Button onClick={onBack} variant="outlined" className={classes.button}>前へ</Button>
                 </div>
               </div>
             </StepContent>
           </Step>
-        ))}
+          <Step>
+            <StepLabel>確認</StepLabel>
+            <StepContent>
+              confirm
+              <div className={classes.actionsContainer}>
+                <div>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={onNext}
+                    className={classes.button}
+                  >作成</Button>
+                  <Button onClick={onBack} variant="outlined" className={classes.button}>前へ</Button>
+                </div>
+              </div>
+            </StepContent>
+          </Step>
       </Stepper>
-      {activeStep === steps.length && (
+      {activeStep === 4 && (
         <Paper square elevation={0} className={classes.resetContainer}>
           <Typography>卓の作成が完了しました。</Typography>
           <Button onClick={onReset} variant="outlined" className={classes.button}>リセット</Button>

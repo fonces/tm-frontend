@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, ChangeEvent } from 'react'
 import { createStyles, makeStyles } from '@material-ui/core/styles'
 import Accordion from '@material-ui/core/Accordion'
 import AccordionSummary from '@material-ui/core/AccordionSummary'
@@ -27,12 +27,12 @@ const useStyles = makeStyles(() =>
   }),
 )
 
-type UserItemProps = User & Pick<ReturnType<typeof useTeamUsers>, 'onEntry'>
+type UserItemProps = User & { onChangeEntry: (_: ChangeEvent<HTMLInputElement>, checked: boolean) => void }
 const UserItem = ({
   id,
   name,
   entry,
-  onEntry,
+  onChangeEntry,
 }: UserItemProps) => {
   const classes = useStyles()
   const labelId = `user-checkbox-${id}`
@@ -43,7 +43,7 @@ const UserItem = ({
       <Checkbox
         edge="end"
         value={id}
-        onChange={onEntry}
+        onChange={onChangeEntry}
         checked={entry}
         inputProps={{ 'aria-labelledby': labelId }}
       />
@@ -58,7 +58,7 @@ const MemolizedUserItem = memo(
 
 const StepTeam = () => {
   const classes = useStyles()
-  const { teamUsers, onEntry } = useTeamUsers()
+  const { teamUsers, onChangeEntry } = useTeamUsers()
 
   return (
     <div className={classes.root}>
@@ -73,7 +73,7 @@ const StepTeam = () => {
           </AccordionSummary>
           <AccordionDetails className={classes.accordion}>
             <List dense className={classes.root}>
-              {users.map((user) => <MemolizedUserItem key={user.id} {...user} onEntry={onEntry} />)}
+              {users.map((user) => <MemolizedUserItem key={user.id} {...user} onChangeEntry={onChangeEntry(user.id)} />)}
             </List>
           </AccordionDetails>
         </Accordion>

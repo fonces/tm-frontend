@@ -7,6 +7,7 @@ import actions from './actions'
 
 const setUsers = () => {
   const { state, dispatch } = useContext(Context)
+  const { users, ids, byId } = selector(state)
 
   const setUsers = (response: UserRow[]) => {
     dispatch(actions.setUsers(
@@ -28,8 +29,13 @@ const setUsers = () => {
 
   const updateUser = (user: User) => dispatch(actions.updateUser(user.id, user))
 
+  const isSelectedUsers = users.some(({ entry }) => entry)
+
   return {
-    ...selector(state),
+    users,
+    ids,
+    byId,
+    isSelectedUsers,
     setUsers,
     updateUser,
   }

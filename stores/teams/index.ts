@@ -1,13 +1,14 @@
 
 import { useContext } from 'react'
 import { UserRow } from '@/api/users/GET'
-import { TeamById } from './types'
+import { Team, TeamById } from './types'
 import { Context } from './context'
 import selector from './selector'
 import actions from './actions'
 
 const useTeams = () => {
   const { state, dispatch } = useContext(Context)
+  const { teams, ids, byId } = selector(state)
 
   const setTeams = (response: UserRow[]) => {
     dispatch(actions.setTeams(
@@ -26,9 +27,17 @@ const useTeams = () => {
     ))
   }
 
+  const updateTeam = (team: Team) => dispatch(actions.updateTeam(team.id, team))
+
+  const isAllSettedDice = teams.every(({ dice }) => !!dice)
+
   return {
-    ...selector(state),
+    teams,
+    ids,
+    byId,
+    isAllSettedDice,
     setTeams,
+    updateTeam,
   }
 }
 
