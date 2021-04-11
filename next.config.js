@@ -1,14 +1,14 @@
-const path = require('path');
+const path = require('path')
 
-require('dotenv').config();
+require('dotenv').config()
 
 module.exports = {
   assetPrefix: process.env.GITHUB_PAGES ? '/tm-frontend' : '',
   env: {
-    endPoint: process.env.ENDPOINT
+    endPoint: process.env.ENDPOINT,
   },
-  webpack(config, options) {
+  webpack (config, options) {
     config.resolve.alias['@'] = path.join(__dirname, './')
     return config
   },
-};
+}

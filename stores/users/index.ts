@@ -1,25 +1,26 @@
 
 import { useContext } from 'react'
 import { UserRow } from '@/api/users/GET'
-import { TeamById } from './types'
+import { UserById } from './types'
 import { Context } from './context'
 import selector from './selector'
 import actions from './actions'
 
-const useTeams = () => {
+const setUsers = () => {
   const { state, dispatch } = useContext(Context)
 
-  const setTeams = (response: UserRow[]) => {
-    dispatch(actions.setTeams(
-      response.reduce<TeamById>((acc, { teamId, teamName }) => (
-        acc[teamId]
+  const setUsers = (response: UserRow[]) => {
+    dispatch(actions.setUsers(
+      response.reduce<UserById>((acc, { teamId, userId, userName }) => (
+        acc[userId]
           ? acc
           : {
               ...acc,
-              [teamId]: {
-                id: teamId,
-                name: teamName,
-                dice: 0,
+              [userId]: {
+                id: userId,
+                teamId: teamId,
+                name: userName,
+                entry: false,
               },
             }
       ), {}),
@@ -28,9 +29,9 @@ const useTeams = () => {
 
   return {
     ...selector(state),
-    setTeams,
+    setUsers,
   }
 }
 
-export default useTeams
+export default setUsers
 export { Provider } from './context'

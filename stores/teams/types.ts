@@ -1,11 +1,14 @@
-export type User = {
-  id: number
-  name: string
-}
+import { ToById } from '@/helpers/types'
 
 export type Team = {
-  id: number
+  id: string
   name: string
   dice: number
-  users: User[]
+}
+
+export type TeamById = ToById<Team>
+
+export type State = {
+  origin: TeamById
+  byId: TeamById
 }

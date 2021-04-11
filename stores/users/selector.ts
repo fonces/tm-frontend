@@ -3,11 +3,11 @@ import { State } from './types'
 
 const selector = ({ byId }: State) => useMemo(() => {
   const ids = Object.keys(byId)
-  const teams = ids.map(id => ({ ...byId[id] }))
+  const users = ids.map(id => byId[id])
 
   return {
     ids,
-    teams,
+    users,
     byId,
   }
 }, [byId])

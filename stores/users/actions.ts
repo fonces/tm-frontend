@@ -1,19 +1,19 @@
-import { TeamById } from './types'
+import { UserById } from './types'
 
 export type Actions = 'SET'
 
 export type ActionType = {
   type: 'SET',
   payload: {
-    byId: TeamById
+    byId: UserById
   },
 }
 
-const setTeams = (byId: TeamById): ActionType => ({
+const setUsers = (byId: UserById): ActionType => ({
   type: 'SET',
   payload: { byId },
 })
 
 export default {
-  setTeams,
+  setUsers,
 }

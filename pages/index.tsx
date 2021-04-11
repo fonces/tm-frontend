@@ -1,4 +1,8 @@
 import { useEffect } from 'react'
+import getUsers from '@/api/users/GET'
+import useStep from '@/hooks/step'
+import useTeams, { Provider as TeamsProvider } from '@/stores/teams'
+import useUsers, { Provider as UsersProvider } from '@/stores/users'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Stepper from '@material-ui/core/Stepper'
 import Step from '@material-ui/core/Step'
@@ -7,12 +11,9 @@ import StepContent from '@material-ui/core/StepContent'
 import Button from '@material-ui/core/Button'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
+import StepTeam from '@/components/Steps/Team'
 
-import getTeams from '@/api/team/GET'
-import useTeams, { Provider } from '@/stores/teams'
-import useStep from '@/hooks/step'
-
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles((theme: Theme) => (
   createStyles({
     root: {
       width: '100%',
@@ -27,8 +28,8 @@ const useStyles = makeStyles((theme: Theme) =>
     resetContainer: {
       padding: theme.spacing(3),
     },
-  }),
-)
+  })
+))
 
 function getSteps () {
   return ['参加ユーザー設定', 'ダイス値入力', '優先卓設定', '確認']
@@ -37,7 +38,7 @@ function getSteps () {
 function getStepContent (step: number) {
   switch (step) {
     case 0:
-      return '参加するユーザーにチェックを入れてください'
+      return <StepTeam />
     case 1:
       return '各チームのダイスの値を入力してください'
     case 2:
@@ -52,18 +53,16 @@ function getStepContent (step: number) {
 const Index = () => {
   const classes = useStyles()
   const steps = getSteps()
-  const { ids, setTeams } = useTeams()
+  const { activeStep, onNext, onBack, onReset } = useStep()
+  const { setTeams } = useTeams()
+  const { setUsers } = useUsers()
 
   useEffect(() => {
-    getTeams().then(setTeams)
+    getUsers().then(users => {
+      setTeams(users)
+      setUsers(users)
+    })
   }, [])
-
-  const {
-    activeStep,
-    onNext,
-    onBack,
-    onReset,
-  } = useStep()
 
   return (
     <div className={classes.root}>
@@ -96,15 +95,16 @@ const Index = () => {
           <Button onClick={onReset} variant="outlined" className={classes.button}>リセット</Button>
         </Paper>
       )}
-      {JSON.stringify(ids)}
     </div>
   )
 }
 
-const IndexEnhance = () => (
-  <Provider>
-    <Index />
-  </Provider>
+const EnhanceIndex = () => (
+  <TeamsProvider>
+    <UsersProvider>
+      <Index />
+    </UsersProvider>
+  </TeamsProvider>
 )
 
-export default IndexEnhance
+export default EnhanceIndex
