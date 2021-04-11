@@ -1,15 +1,23 @@
-import { Team } from '@/pages/utils/teams'
-const ENDPOINT = process.env.endPoint!
+export type User = {
+  id: number
+  name: string
+}
+export type Team = {
+  id: number
+  name: string
+  dice: number
+  users: User[]
+}
 
 type Columns = 'teamId' | 'teamName' | 'userId' | 'userName'
 
-const getTeams = () => fetch(ENDPOINT)
+const getTeams = () => fetch(process.env.endPoint!)
   .then(res => res.json())
   .then(res => (res as Record<Columns, string>[]).map(({ teamId, teamName, userId, userName }) => ({
     teamId: +teamId,
     teamName,
     userId: +userId,
-    userName
+    userName,
   })))
   .then(res => res.reduce<Team[]>((acc, { teamId, teamName, userId, userName }) => {
     if (!acc.find(t => t.id === teamId)) {
@@ -17,7 +25,7 @@ const getTeams = () => fetch(ENDPOINT)
         id: teamId,
         name: teamName,
         dice: 0,
-        users: []
+        users: [],
       })
     }
     acc

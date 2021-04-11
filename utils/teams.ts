@@ -1,13 +1,4 @@
-export type User = {
-  id: number
-  name: string
-}
-export type Team = {
-  id: number
-  name: string
-  dice: number
-  users: User[]
-}
+import { Team } from '@/pages/api/team/GET'
 
 /**
  * 分けた卓の番号をチームごとに返却する
@@ -33,9 +24,9 @@ export const allocation = (teams: Team[], tables: number) => {
  * @returns 数値
  */
 const numberRepeat = (max: number) => {
-  const loop = (function*() {
+  const loop = (function * () {
     let index = 0
-    while(true) {
+    while (true) {
       index++
       yield index
       if (max === index) {

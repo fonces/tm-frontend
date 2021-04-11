@@ -46,7 +46,7 @@ export const parseTables = (matched: Match) => ({
 
 /**
  * 三麻と四麻の値を反転させる
- * @param weight 
+ * @param weight
  * @returns Weight
  */
 export const getInversion = (weight: Weight) => weight === 3 ? 4 : 3
