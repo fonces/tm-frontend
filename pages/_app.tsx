@@ -16,7 +16,7 @@ export default function App ({ Component, pageProps }:AppProps) {
   return (
     <Fragment>
       <Head>
-        <title>My page</title>
+        <title>- 卓リスト作成 -</title>
         <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
       </Head>
       <ThemeProvider theme={theme}>

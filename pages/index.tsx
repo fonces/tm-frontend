@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useSnackbar, SnackbarProvider, VariantType } from 'notistack'
 import getUsers from '@/api/users/GET'
 import useStep from '@/hooks/step'
@@ -8,11 +8,13 @@ import useTeams, { Provider as TeamsProvider } from '@/stores/teams'
 import useUsers, { Provider as UsersProvider } from '@/stores/users'
 import useSettings, { Provider as SettingsProvider } from '@/stores/settings'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
+import Backdrop from '@material-ui/core/Backdrop'
+import Button from '@material-ui/core/Button'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import Stepper from '@material-ui/core/Stepper'
 import Step from '@material-ui/core/Step'
 import StepLabel from '@material-ui/core/StepLabel'
 import StepContent from '@material-ui/core/StepContent'
-import Button from '@material-ui/core/Button'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import StepTeam from '@/components/Steps/Team'
@@ -24,6 +26,10 @@ const useStyles = makeStyles((theme: Theme) => (
   createStyles({
     root: {
       width: '100%',
+    },
+    backdrop: {
+      zIndex: theme.zIndex.drawer + 1,
+      color: '#fff',
     },
     title: {
       marginTop: theme.spacing(3),
@@ -52,12 +58,16 @@ const Index = () => {
   const { isAllSettedDice } = useTeamUsers()
   const { loadSettings } = useSettings()
 
+  const [loading, setLoading] = useState(true)
+
   useEffect(() => {
     loadSettings()
-    getUsers().then(users => {
-      setTeams(users)
-      setUsers(users)
-    })
+    getUsers()
+      .then(users => {
+        setTeams(users)
+        setUsers(users)
+      })
+      .finally(() => setLoading(false))
   }, [])
 
   const openSnackbar = (message: string, variant: VariantType) => {
@@ -80,6 +90,9 @@ const Index = () => {
 
   return (
     <div className={classes.root}>
+      <Backdrop className={classes.backdrop} open={loading}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Typography variant="h5" className={classes.title}>卓リスト作成</Typography>
       <Stepper activeStep={activeStep} orientation="vertical">
           <Step>

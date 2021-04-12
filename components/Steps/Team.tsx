@@ -1,4 +1,4 @@
-import { memo, ChangeEvent } from 'react'
+import { memo, ChangeEvent, useRef } from 'react'
 import { createStyles, makeStyles } from '@material-ui/core/styles'
 import Accordion from '@material-ui/core/Accordion'
 import AccordionSummary from '@material-ui/core/AccordionSummary'
@@ -35,20 +35,27 @@ const UserItem = ({
   onChangeEntry,
 }: UserItemProps) => {
   const classes = useStyles()
+  const checkboxRef = useRef<HTMLButtonElement>(null)
   const labelId = `user-checkbox-${id}`
+
+  const captureEvent = () => {
+    checkboxRef.current!.querySelector('input')?.click()
+  }
+
   return (
-    <ListItem key={id} button className={classes.item}>
-    <ListItemText id={labelId} primary={name} />
-    <ListItemSecondaryAction>
-      <Checkbox
-        edge="end"
-        value={id}
-        onChange={onChangeEntry}
-        checked={entry}
-        inputProps={{ 'aria-labelledby': labelId }}
-      />
-    </ListItemSecondaryAction>
-  </ListItem>
+    <ListItem key={id} button onClick={captureEvent} className={classes.item}>
+      <ListItemText id={labelId} primary={name} />
+      <ListItemSecondaryAction>
+        <Checkbox
+          ref={checkboxRef}
+          edge="end"
+          value={id}
+          onChange={onChangeEntry}
+          checked={entry}
+          inputProps={{ 'aria-labelledby': labelId }}
+        />
+      </ListItemSecondaryAction>
+    </ListItem>
   )
 }
 const MemolizedUserItem = memo(

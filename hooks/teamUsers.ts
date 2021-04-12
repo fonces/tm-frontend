@@ -1,4 +1,5 @@
-import { useMemo, ChangeEvent } from 'react'
+import { useMemo, useCallback, ChangeEvent } from 'react'
+import { range } from '@/utils/array'
 import useTeams from '@/stores/teams'
 import useUsers from '@/stores/users'
 import { Team } from '@/stores/teams/types'
@@ -7,6 +8,8 @@ import { User } from '@/stores/users/types'
 export type TeamUser = Team & {
   users: User[]
 }
+
+const dices = range(6, 36)
 
 const useTeamUsers = () => {
   const { teams, byId: teamById, updateTeam } = useTeams()
@@ -25,6 +28,13 @@ const useTeamUsers = () => {
       .filter(({ users }) => users.length)),
   [teams, users])
 
+  const isAllSettedDice = entryTeamUsers.every(({ dice }) => !!dice)
+
+  const narrowedDices = useCallback((myDice: number) => {
+    const selectedDices = entryTeamUsers.map(({ dice }) => dice)
+    return dices.filter(dice => !selectedDices.includes(dice) || dice === myDice)
+  }, [entryTeamUsers])
+
   const onChangeEntry = (id: string) => (_: ChangeEvent<HTMLInputElement>, checked: boolean) => {
     const user = userById[id]
     updateUser({
@@ -42,12 +52,11 @@ const useTeamUsers = () => {
     })
   }
 
-  const isAllSettedDice = entryTeamUsers.every(({ dice }) => !!dice)
-
   return {
     teamUsers,
     entryTeamUsers,
     isAllSettedDice,
+    narrowedDices,
     onChangeEntry,
     onChangeDice,
   }
