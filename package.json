@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "export": "next export"
+    "dev": "ENV=env next dev",
+    "build": "ENV=env NEXT_PUBLIC_ENV=next_public_env next build",
+    "start": "ENV=env NEXT_PUBLIC_ENV=next_public_env next start",
+    "export": "ENV=env NEXT_PUBLIC_ENV=next_public_env next export"
   },
   "repository": {
     "type": "git",
@@ -31,12 +31,10 @@
     "remark-html": "^12.0.0"
   },
   "devDependencies": {
-    "@types/dotenv": "^8.2.0",
     "@types/node": "^14.14.37",
     "@types/react": "^17.0.3",
     "@typescript-eslint/eslint-plugin": "^4.21.0",
     "@typescript-eslint/parser": "^4.21.0",
-    "dotenv": "^8.2.0",
     "eslint": "^7.24.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",
