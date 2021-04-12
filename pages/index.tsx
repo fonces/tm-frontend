@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useSnackbar, SnackbarProvider } from 'notistack'
+import { useSnackbar, SnackbarProvider, VariantType } from 'notistack'
 import getUsers from '@/api/users/GET'
 import useStep from '@/hooks/step'
 import useMaker from '@/hooks/maker'
@@ -44,9 +44,9 @@ const useStyles = makeStyles((theme: Theme) => (
 
 const Index = () => {
   const classes = useStyles()
-  const { enqueueSnackbar } = useSnackbar()
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar()
   const { activeStep, onNext, onBack, onReset } = useStep()
-  const { getCopyText } = useMaker()
+  const { isCreatable, getCopyText } = useMaker()
   const { setTeams } = useTeams()
   const { setUsers, isSelectedUsers } = useUsers()
   const { isAllSettedDice } = useTeamUsers()
@@ -60,16 +60,21 @@ const Index = () => {
     })
   }, [])
 
+  const openSnackbar = (message: string, variant: VariantType) => {
+    const key = enqueueSnackbar(message, { variant })
+    setTimeout(() => closeSnackbar(key), 5000)
+  }
+
   const onCopy = () => {
     try {
       if (navigator.clipboard) {
         navigator.clipboard.writeText(getCopyText())
-        enqueueSnackbar('コピーしました', { variant: 'success' })
+        openSnackbar('コピーしました', 'success')
       } else {
         throw new Error('お使いの端末がコピーに対応していません。')
       }
     } catch (e) {
-      enqueueSnackbar(e.message, { variant: 'error' })
+      openSnackbar('e.message', 'error')
     }
   }
 
@@ -128,6 +133,7 @@ const Index = () => {
                 <Button
                   variant="contained"
                   color="primary"
+                  disabled={!isCreatable}
                   onClick={onNext}
                 >作成</Button>
                 <Button onClick={onBack} variant="outlined">修正</Button>
