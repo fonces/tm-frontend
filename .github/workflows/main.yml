@@ -39,6 +39,7 @@ jobs:
       env:
         SS_ENDPOINT: ${{ secrets.SS_ENDPOINT }}
         GITHUB_PAGES: true
+      run: echo "$SS_ENDPOINT"
 
     # 静的なHTMLとしてNext.jsアプリを生成する
     # プロジェクトルート直下にoutディレクトリができる

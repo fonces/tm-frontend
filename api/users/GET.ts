@@ -7,7 +7,7 @@ export type UserRow = {
 
 type Columns = 'teamId' | 'teamName' | 'userId' | 'userName'
 
-const getUsers = () => fetch(process.env.SS_ENDPOINT!)
+const getUsers = () => fetch(process.env.ssEndPoint!)
   .then(res => res.json())
   .then(res => (res as Record<Columns, string>[]).map(({ teamId, teamName, userId, userName }) => ({
     teamId,
