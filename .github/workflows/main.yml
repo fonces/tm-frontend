@@ -36,6 +36,8 @@ jobs:
     # プロジェクトルート直下に.nextディレクトリができる
     - name: build
       run: npm run build
+      env:
+        SS_ENDPOINT: ${{ secrets.SS_ENDPOINT }}
 
     # 静的なHTMLとしてNext.jsアプリを生成する
     # プロジェクトルート直下にoutディレクトリができる
