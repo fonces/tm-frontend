@@ -74,7 +74,7 @@ const Index = () => {
         throw new Error('お使いの端末がコピーに対応していません。')
       }
     } catch (e) {
-      openSnackbar('e.message', 'error')
+      openSnackbar(e.message, 'error')
     }
   }
 
