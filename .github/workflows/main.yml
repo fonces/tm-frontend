@@ -40,7 +40,7 @@ jobs:
         SS_ENDPOINT: ${{ secrets.SS_ENDPOINT }}
         GITHUB_PAGES: true
     
-    -name: envtest
+    - name: envtest
       run: echo "$SS_ENDPOINT"
       env:
         SS_ENDPOINT: ${{ secrets.SS_ENDPOINT }}
