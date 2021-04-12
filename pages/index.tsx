@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { useSnackbar, SnackbarProvider } from 'notistack'
 import getUsers from '@/api/users/GET'
 import useStep from '@/hooks/step'
 import useMaker from '@/hooks/maker'
@@ -14,7 +15,6 @@ import StepContent from '@material-ui/core/StepContent'
 import Button from '@material-ui/core/Button'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
-// import Snackbar from '@material-ui/core/Snackbar'
 import StepTeam from '@/components/Steps/Team'
 import StepDice from '@/components/Steps/Dice'
 import StepOther from '@/components/Steps/Other'
@@ -44,6 +44,7 @@ const useStyles = makeStyles((theme: Theme) => (
 
 const Index = () => {
   const classes = useStyles()
+  const { enqueueSnackbar } = useSnackbar()
   const { activeStep, onNext, onBack, onReset } = useStep()
   const { getCopyText } = useMaker()
   const { setTeams } = useTeams()
@@ -63,11 +64,12 @@ const Index = () => {
     try {
       if (navigator.clipboard) {
         navigator.clipboard.writeText(getCopyText())
+        enqueueSnackbar('コピーしました', { variant: 'success' })
       } else {
         throw new Error('お使いの端末がコピーに対応していません。')
       }
     } catch (e) {
-      console.error(e.message)
+      enqueueSnackbar(e.message, { variant: 'error' })
     }
   }
 
@@ -151,13 +153,15 @@ const Index = () => {
 }
 
 const EnhanceIndex = () => (
-  <SettingsProvider>
-    <TeamsProvider>
-      <UsersProvider>
-        <Index />
-      </UsersProvider>
-    </TeamsProvider>
-  </SettingsProvider>
+  <SnackbarProvider maxSnack={1}>
+    <SettingsProvider>
+      <TeamsProvider>
+        <UsersProvider>
+          <Index />
+        </UsersProvider>
+      </TeamsProvider>
+    </SettingsProvider>
+  </SnackbarProvider>
 )
 
 export default EnhanceIndex
