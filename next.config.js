@@ -1,6 +1,8 @@
 const path = require('path')
 
-require('dotenv').config()
+if (!process.env.GITHUB_PAGES) {
+  require('dotenv').config()
+}
 
 module.exports = {
   assetPrefix: process.env.GITHUB_PAGES ? '/tm-frontend' : '',
