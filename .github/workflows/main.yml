@@ -35,15 +35,10 @@ jobs:
     # Next.jsアプリをビルドする
     # プロジェクトルート直下に.nextディレクトリができる
     - name: build
+      run: npm run build
       env:
         SS_ENDPOINT: ${{ secrets.SS_ENDPOINT }}
         GITHUB_PAGES: true
-      run: npm run build
-    
-    - name: envtest
-      env:
-        SS_ENDPOINT: ${{ secrets.SS_ENDPOINT }}
-      run: echo "$SS_ENDPOINT"
 
     # 静的なHTMLとしてNext.jsアプリを生成する
     # プロジェクトルート直下にoutディレクトリができる
