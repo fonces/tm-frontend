@@ -43,13 +43,10 @@ const useTeams = () => {
     saveStorage(filterData({ ...byId, [team.id]: team }))
   }
 
-  const isAllSettedDice = teams.every(({ dice }) => !!dice)
-
   return {
     teams,
     ids,
     byId,
-    isAllSettedDice,
     setTeams,
     updateTeam,
   }

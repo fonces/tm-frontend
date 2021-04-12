@@ -1,4 +1,6 @@
-export type Weight = 3 | 4
+import { Priority } from '@/stores/settings/types'
+import { TeamUser } from '@/hooks/teamUsers'
+
 export type Match = {
   4: number
   3: number
@@ -14,7 +16,7 @@ export type Table = {
  * @param numbers 総人数
  * @returns Match型のObject
  */
-export const divisionNumbers = (weight: Weight, numbers: number) => {
+export const divisionNumbers = (priority: Priority, numbers: number) => {
   const matched: Match[] = []
   for (let fourBase = 0; fourBase <= numbers; fourBase += 4) {
     const remainderFour = Math.round(fourBase / 4)
@@ -28,7 +30,7 @@ export const divisionNumbers = (weight: Weight, numbers: number) => {
     }
   }
   const centerIndex = matched.length / 2
-  const index = Number.isInteger(centerIndex) && weight === 3
+  const index = Number.isInteger(centerIndex) && priority === 3
     ? centerIndex - 1
     : Math.floor(centerIndex)
   return matched[index]
@@ -45,8 +47,38 @@ export const parseTables = (matched: Match) => ({
 })
 
 /**
- * 三麻と四麻の値を反転させる
- * @param weight
- * @returns Weight
+ * 分けた卓の番号をチームごとに返却する
+ * @param teams チームリスト
+ * @param tables テーブル情報
+ * @returns チームIDとテーブル番号の配列
  */
-export const getInversion = (weight: Weight) => weight === 3 ? 4 : 3
+export const allocation = (teams: TeamUser[], tables: number) => {
+  const repeat = numberRepeat(tables)
+  return teams
+    .sort((a, b) => a.dice - b.dice)
+    .map(team => ({
+      id: team.id,
+      tables: [...new Array(team.users.length)]
+        .map(repeat)
+        .sort((a, b) => a - b),
+    }))
+}
+
+/**
+ * 数値をリピートする関数を作成する
+ * @param max 最大値
+ * @returns 数値
+ */
+const numberRepeat = (max: number) => {
+  const loop = (function * () {
+    let index = 0
+    while (true) {
+      index++
+      yield index
+      if (max === index) {
+        index = 0
+      }
+    }
+  })()
+  return () => loop.next().value
+}

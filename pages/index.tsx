@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
 import getUsers from '@/api/users/GET'
 import useStep from '@/hooks/step'
+import useMaker from '@/hooks/maker'
+import useTeamUsers from '@/hooks/teamUsers'
 import useTeams, { Provider as TeamsProvider } from '@/stores/teams'
 import useUsers, { Provider as UsersProvider } from '@/stores/users'
 import useSettings, { Provider as SettingsProvider } from '@/stores/settings'
@@ -12,9 +14,11 @@ import StepContent from '@material-ui/core/StepContent'
 import Button from '@material-ui/core/Button'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
+// import Snackbar from '@material-ui/core/Snackbar'
 import StepTeam from '@/components/Steps/Team'
 import StepDice from '@/components/Steps/Dice'
 import StepOther from '@/components/Steps/Other'
+import StepConfirm from '@/components/Steps/Confirm'
 
 const useStyles = makeStyles((theme: Theme) => (
   createStyles({
@@ -32,7 +36,8 @@ const useStyles = makeStyles((theme: Theme) => (
       marginTop: theme.spacing(2),
     },
     resetContainer: {
-      padding: theme.spacing(3),
+      paddingLeft: theme.spacing(3),
+      paddingRight: theme.spacing(3),
     },
   })
 ))
@@ -40,8 +45,10 @@ const useStyles = makeStyles((theme: Theme) => (
 const Index = () => {
   const classes = useStyles()
   const { activeStep, onNext, onBack, onReset } = useStep()
+  const { getCopyText } = useMaker()
   const { setTeams } = useTeams()
   const { setUsers, isSelectedUsers } = useUsers()
+  const { isAllSettedDice } = useTeamUsers()
   const { loadSettings } = useSettings()
 
   useEffect(() => {
@@ -51,6 +58,18 @@ const Index = () => {
       setUsers(users)
     })
   }, [])
+
+  const onCopy = () => {
+    try {
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(getCopyText())
+      } else {
+        throw new Error('お使いの端末がコピーに対応していません。')
+      }
+    } catch (e) {
+      console.error(e.message)
+    }
+  }
 
   return (
     <div className={classes.root}>
@@ -78,7 +97,7 @@ const Index = () => {
                 <Button
                   variant="contained"
                   color="primary"
-                  // disabled={!isAllSettedDice}
+                  disabled={!isAllSettedDice}
                   onClick={onNext}
                 >次へ</Button>
                 <Button onClick={onBack} variant="outlined">前へ</Button>
@@ -100,9 +119,9 @@ const Index = () => {
             </StepContent>
           </Step>
           <Step>
-            <StepLabel>確認</StepLabel>
+            <StepLabel>設定内容確認</StepLabel>
             <StepContent>
-              confirm
+              <StepConfirm />
               <div className={classes.actionsContainer}>
                 <Button
                   variant="contained"
@@ -117,7 +136,14 @@ const Index = () => {
       {activeStep === 4 && (
         <Paper square elevation={0} className={classes.resetContainer}>
           <Typography>卓の作成が完了しました。</Typography>
-          <Button onClick={onReset} variant="outlined">リセット</Button>
+          <div className={classes.actionsContainer}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={onCopy}
+            >コピー</Button>
+            <Button onClick={onReset} variant="outlined">リセット</Button>
+          </div>
         </Paper>
       )}
     </div>

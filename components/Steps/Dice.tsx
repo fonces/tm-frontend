@@ -21,11 +21,11 @@ const DICE_MAX = 6 * 6
 
 const StepDice = () => {
   const classes = useStyles()
-  const { teamUsers, onChangeDice } = useTeamUsers()
+  const { entryTeamUsers, onChangeDice } = useTeamUsers()
 
   return (
     <div className={classes.root}>
-      {teamUsers.map(({ id, name, dice }) => {
+      {entryTeamUsers.map(({ id, name, dice }) => {
         const labelId = `dice-label-${id}`
         return (
           <FormControl key={id}>
