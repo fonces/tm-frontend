@@ -6,15 +6,14 @@ import { initialState, Context } from './context'
 import selector from './selector'
 import actions from './actions'
 
-const { loadStorage, saveStorage } = createStorageManager('users', initialState)
-const filterData = (usersById: UserById) => (
+const { loadStorage, syncStorage } = createStorageManager('users', initialState.byId, (usersById: UserById) => (
   Object
     .values(usersById)
     .reduce<{ [key: string ]: Pick<User, 'entry'> }>((acc, { id, entry }) => ({
       ...acc,
       [id]: { entry },
     }), {})
-)
+))
 
 const useUsers = () => {
   const { state, dispatch } = useContext(Context)
@@ -32,12 +31,11 @@ const useUsers = () => {
       },
     }), {})
     dispatch(actions.setUsers(usersById))
-    saveStorage(filterData(usersById))
   }
 
   const updateUser = (user: User) => {
     dispatch(actions.updateUser(user.id, user))
-    saveStorage(filterData({ ...byId, [user.id]: user }))
+    syncStorage({ [user.id]: user })
   }
 
   const isSelectedUsers = users.some(({ entry }) => entry)

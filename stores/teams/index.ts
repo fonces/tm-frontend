@@ -6,15 +6,14 @@ import { initialState, Context } from './context'
 import selector from './selector'
 import actions from './actions'
 
-const { loadStorage, saveStorage } = createStorageManager('teams', initialState)
-const filterData = (teamsById: TeamById) => (
+const { loadStorage, syncStorage } = createStorageManager('teams', initialState.byId, (teamsById: TeamById) => (
   Object
     .values(teamsById)
     .reduce<{ [key: string ]: Pick<Team, 'dice'> }>((acc, { id, dice }) => ({
       ...acc,
       [id]: { dice },
     }), {})
-)
+))
 
 const useTeams = () => {
   const { state, dispatch } = useContext(Context)
@@ -35,12 +34,11 @@ const useTeams = () => {
           }
     ), {})
     dispatch(actions.setTeams(teamsById))
-    saveStorage(filterData(teamsById))
   }
 
   const updateTeam = (team: Team) => {
     dispatch(actions.updateTeam(team.id, team))
-    saveStorage(filterData({ ...byId, [team.id]: team }))
+    syncStorage({ [team.id]: team })
   }
 
   return {

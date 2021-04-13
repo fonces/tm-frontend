@@ -5,7 +5,7 @@ import { initialState, Context } from './context'
 import selector from './selector'
 import actions from './actions'
 
-const { loadStorage, saveStorage } = createStorageManager('settings', initialState)
+const { loadStorage, syncStorage } = createStorageManager('settings', initialState)
 
 const useSettings = () => {
   const { state, dispatch } = useContext(Context)
@@ -14,12 +14,11 @@ const useSettings = () => {
   const loadSettings = () => {
     const settings = loadStorage()
     dispatch(actions.setSettings(settings))
-    saveStorage(settings)
   }
 
   const updateSettings = (settings: Settings) => {
     dispatch(actions.updateSettings(settings))
-    saveStorage(Object.assign(state, settings))
+    syncStorage(Object.assign(state, settings))
   }
 
   return {
