@@ -1,7 +1,8 @@
 import { useState } from 'react'
 
-const useStep = () => {
+const useStep = (last: number) => {
   const [activeStep, setActiveStep] = useState(0)
+  const isStepCompleted = activeStep === last
 
   const onNext = () => setActiveStep((prevActiveStep) => prevActiveStep + 1)
   const onBack = () => setActiveStep((prevActiveStep) => prevActiveStep - 1)
@@ -9,6 +10,7 @@ const useStep = () => {
 
   return {
     activeStep,
+    isStepCompleted,
     onNext,
     onBack,
     onReset,

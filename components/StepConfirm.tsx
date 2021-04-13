@@ -1,9 +1,11 @@
 import { useMemo } from 'react'
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
+
+import { PRIORITY_KANJI_MAP } from '@/helpers/consts'
 import useMaker from '@/hooks/maker'
 import useTeamUsers from '@/hooks/teamUsers'
 import useSettings from '@/stores/settings'
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-import Typography from '@material-ui/core/Typography'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -42,7 +44,7 @@ const Confirm = () => {
           <Typography key={id} variant="caption">{name}チーム : {dice.toLocaleString()}</Typography>
         ))}
       </div>
-      <Typography>優先卓 : {priority}麻</Typography>
+      <Typography>優先卓 : {PRIORITY_KANJI_MAP[priority]}麻</Typography>
       <div className={classes.list}>
         <Typography variant="caption">三麻 : {tables[3]}卓</Typography>
         <Typography variant="caption">四麻 : {tables[4]}卓</Typography>

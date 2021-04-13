@@ -1,5 +1,5 @@
-import { Priority } from '@/stores/settings/types'
 import { TeamUser } from '@/hooks/teamUsers'
+import { Priority } from '@/stores/settings/types'
 
 export type Match = {
   4: number

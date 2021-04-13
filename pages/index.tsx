@@ -1,12 +1,5 @@
 import { useState, useEffect } from 'react'
 import { useSnackbar, SnackbarProvider, VariantType } from 'notistack'
-import getUsers from '@/api/users/GET'
-import useStep from '@/hooks/step'
-import useMaker from '@/hooks/maker'
-import useTeamUsers from '@/hooks/teamUsers'
-import useTeams, { Provider as TeamsProvider } from '@/stores/teams'
-import useUsers, { Provider as UsersProvider } from '@/stores/users'
-import useSettings, { Provider as SettingsProvider } from '@/stores/settings'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Backdrop from '@material-ui/core/Backdrop'
 import Button from '@material-ui/core/Button'
@@ -17,10 +10,19 @@ import StepLabel from '@material-ui/core/StepLabel'
 import StepContent from '@material-ui/core/StepContent'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
-import StepTeam from '@/components/Steps/Team'
-import StepDice from '@/components/Steps/Dice'
-import StepOther from '@/components/Steps/Other'
-import StepConfirm from '@/components/Steps/Confirm'
+
+import getUsers from '@/api/users/GET'
+import useStep from '@/hooks/step'
+import useMaker from '@/hooks/maker'
+import useTeamUsers from '@/hooks/teamUsers'
+import StepConfirm from '@/components/StepConfirm'
+import StepDice from '@/components/StepDice'
+import StepOther from '@/components/StepOther'
+import StepTeam from '@/components/StepTeam'
+import useTeams, { Provider as TeamsProvider } from '@/stores/teams'
+import useUsers, { Provider as UsersProvider } from '@/stores/users'
+import useSettings, { Provider as SettingsProvider } from '@/stores/settings'
+import { wait } from '@/utils/timer'
 
 const useStyles = makeStyles((theme: Theme) => (
   createStyles({
@@ -50,15 +52,20 @@ const useStyles = makeStyles((theme: Theme) => (
 
 const Index = () => {
   const classes = useStyles()
+  const [loading, setLoading] = useState(true)  
   const { enqueueSnackbar, closeSnackbar } = useSnackbar()
-  const { activeStep, onNext, onBack, onReset } = useStep()
+  const { activeStep, isStepCompleted, onNext, onBack, onReset } = useStep(4)
   const { isCreatable, getCopyText } = useMaker()
   const { setTeams } = useTeams()
   const { setUsers, isSelectedUsers } = useUsers()
   const { isAllSettedDice } = useTeamUsers()
   const { loadSettings } = useSettings()
 
-  const [loading, setLoading] = useState(true)
+  const openSnackbar = async (message: string, variant: VariantType) => {
+    const key = enqueueSnackbar(message, { variant })
+    await wait(5000)
+    closeSnackbar(key)
+  }
 
   useEffect(() => {
     loadSettings()
@@ -67,13 +74,9 @@ const Index = () => {
         setTeams(users)
         setUsers(users)
       })
+      .catch(() => openSnackbar('データ取得エラー', 'error'))
       .finally(() => setLoading(false))
   }, [])
-
-  const openSnackbar = (message: string, variant: VariantType) => {
-    const key = enqueueSnackbar(message, { variant })
-    setTimeout(() => closeSnackbar(key), 5000)
-  }
 
   const onCopy = () => {
     try {
@@ -81,7 +84,7 @@ const Index = () => {
         navigator.clipboard.writeText(getCopyText())
         openSnackbar('コピーしました', 'success')
       } else {
-        throw new Error('お使いの端末がコピーに対応していません。')
+        throw new Error('お使いのブラウザにはクリップボード機能がありません。')
       }
     } catch (e) {
       openSnackbar(e.message, 'error')
@@ -154,7 +157,7 @@ const Index = () => {
             </StepContent>
           </Step>
       </Stepper>
-      {activeStep === 4 && (
+      {isStepCompleted && (
         <Paper square elevation={0} className={classes.resetContainer}>
           <Typography>卓の作成が完了しました。</Typography>
           <div className={classes.actionsContainer}>

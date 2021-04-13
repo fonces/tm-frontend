@@ -29,7 +29,7 @@ const useTeams = () => {
             [teamId]: {
               id: teamId,
               name: teamName,
-              dice: (storageData || {})[teamId]?.dice || false,
+              dice: (storageData || {})[teamId]?.dice || 0,
             },
           }
     ), {})

@@ -3,9 +3,10 @@ import Head from 'next/head'
 import { ThemeProvider } from '@material-ui/core/styles'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { AppProps } from 'next/app'
+
 import theme from '@/styles/theme'
 
-export default function App ({ Component, pageProps }:AppProps) {
+export default function App ({ Component, pageProps }: AppProps) {
   useEffect(() => {
     const jssStyles = document.querySelector('#jss-server-side')
     if (jssStyles && jssStyles.parentNode) {

@@ -1,4 +1,6 @@
 import { useMemo } from 'react'
+
+import { PRIORITY_KANJI_MAP } from '@/helpers/consts'
 import useTeamUsers from '@/hooks/teamUsers'
 import useTeams from '@/stores/teams'
 import useSettings from '@/stores/settings'
@@ -47,7 +49,7 @@ const useMaker = () => {
 
     return `------------------------------
 参加総数: ${users}人
-優先作成卓: ${priority}麻
+優先作成卓: ${PRIORITY_KANJI_MAP[priority]}麻
 ------------------------------
 四麻人数: ${numbers[4]}人
 三麻人数: ${numbers[3]}人

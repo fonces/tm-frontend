@@ -1,10 +1,11 @@
 import { useContext } from 'react'
-import { createStorageManager } from '@/utils/storage'
+
 import { UserRow } from '@/api/users/GET'
-import { User, UserById } from './types'
+import actions from './actions'
 import { initialState, Context } from './context'
 import selector from './selector'
-import actions from './actions'
+import { User, UserById } from './types'
+import { createStorageManager } from '@/utils/storage'
 
 const { loadStorage, syncStorage } = createStorageManager('users', initialState.byId, (usersById: UserById) => (
   Object

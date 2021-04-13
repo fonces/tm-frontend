@@ -1,9 +1,9 @@
-import { Settings } from '@/stores/settings/types'
-import { createStorageManager } from '@/utils/storage'
 import { useContext } from 'react'
+import actions from './actions'
 import { initialState, Context } from './context'
 import selector from './selector'
-import actions from './actions'
+import { Settings } from './types'
+import { createStorageManager } from '@/utils/storage'
 
 const { loadStorage, syncStorage } = createStorageManager('settings', initialState)
 
