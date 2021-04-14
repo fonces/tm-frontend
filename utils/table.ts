@@ -52,15 +52,23 @@ export const parseTables = (matched: Match) => ({
  * @param tables テーブル情報
  * @returns チームIDとテーブル番号の配列
  */
-export const allocation = (teams: TeamUser[], tables: number) => {
-  const repeat = numberRepeat(tables)
+export const allocation = (teams: TeamUser[], matched: Match) => {
+  const totalTable = matched[4] + matched[3]
+  const repeat = numberRepeat(totalTable)
   return teams
     .sort((a, b) => a.dice - b.dice)
-    .map(team => ({
-      id: team.id,
-      tables: [...new Array(team.users.length)]
+    .map(({ id, users }) => ({
+      id,
+      tables: [...new Array(users.length)]
         .map(repeat)
         .sort((a, b) => a - b),
+    }))
+    .map(({ tables, ...rest }) => ({
+      ...rest,
+      tables: {
+        4: tables.filter(table => table <= matched[4]),
+        3: tables.filter(table => matched[4] < table && table <= totalTable),
+      }
     }))
 }
 

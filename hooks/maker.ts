@@ -33,7 +33,7 @@ const useMaker = () => {
     }
 
     const tables = parseTables(numbers)
-    const allocate = allocation(entryTeamUsers, tables[3] + tables[4])
+    const allocate = allocation(entryTeamUsers, tables)
 
     return {
       users,
@@ -53,21 +53,28 @@ const useMaker = () => {
 ------------------------------
 四麻人数: ${numbers[4]}人
 三麻人数: ${numbers[3]}人
-------------------------------
 ${tables[4] > 0 ? `四麻卓: 1 ~ ${tables[4]}卓` : ''}
 ${tables[3] > 0 ? `三麻卓: ${tables[4] + 1} ~ ${tables[4] + tables[3]}卓` : ''}
 ------------------------------
-${allocate.map(team => `
-------------------------------
-${teamsById[team.id].name}チーム
-ダイス: ${teamsById[team.id].dice}
-卓: ${team.tables.join(', ')}
-------------------------------`).join('\n')}`
+${allocate.map(team => (
+  [
+    `${teamsById[team.id].name}チーム`,
+    `ダイス: ${teamsById[team.id].dice}`,
+    team.tables[4].length && `四麻卓: ${team.tables[4].join(', ')}`,
+    team.tables[3].length && `三麻卓: ${team.tables[3].join(', ')}`,
+    '------------------------------'
+  ]
+    .filter(Boolean)
+    .join('\n')
+)).join('\n')}`
   }
 
   return {
+    priority,
     users,
+    numbers,
     tables,
+    allocate,
     isCreatable,
     getCopyText,
   }

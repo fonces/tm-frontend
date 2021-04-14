@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useSnackbar, SnackbarProvider, VariantType } from 'notistack'
+import { SnackbarProvider } from 'notistack'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Backdrop from '@material-ui/core/Backdrop'
 import Button from '@material-ui/core/Button'
@@ -12,9 +12,11 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 
 import getUsers from '@/api/users/GET'
-import useStep from '@/hooks/step'
 import useMaker from '@/hooks/maker'
+import useSnackbar from '@/hooks/snackbar'
+import useStep from '@/hooks/step'
 import useTeamUsers from '@/hooks/teamUsers'
+import Result from '@/components/Result'
 import StepConfirm from '@/components/StepConfirm'
 import StepDice from '@/components/StepDice'
 import StepOther from '@/components/StepOther'
@@ -22,7 +24,6 @@ import StepTeam from '@/components/StepTeam'
 import useTeams, { Provider as TeamsProvider } from '@/stores/teams'
 import useUsers, { Provider as UsersProvider } from '@/stores/users'
 import useSettings, { Provider as SettingsProvider } from '@/stores/settings'
-import { wait } from '@/utils/timer'
 
 const useStyles = makeStyles((theme: Theme) => (
   createStyles({
@@ -46,26 +47,21 @@ const useStyles = makeStyles((theme: Theme) => (
     resetContainer: {
       paddingLeft: theme.spacing(3),
       paddingRight: theme.spacing(3),
+      paddingBottom: theme.spacing(3),
     },
   })
 ))
 
 const Index = () => {
   const classes = useStyles()
+  const snackbar = useSnackbar()
   const [loading, setLoading] = useState(true)  
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar()
   const { activeStep, isStepCompleted, onNext, onBack, onReset } = useStep(4)
-  const { isCreatable, getCopyText } = useMaker()
+  const { isCreatable } = useMaker()
   const { setTeams } = useTeams()
   const { setUsers, isSelectedUsers } = useUsers()
   const { isAllSettedDice } = useTeamUsers()
   const { loadSettings } = useSettings()
-
-  const openSnackbar = async (message: string, variant: VariantType) => {
-    const key = enqueueSnackbar(message, { variant })
-    await wait(5000)
-    closeSnackbar(key)
-  }
 
   useEffect(() => {
     loadSettings()
@@ -74,22 +70,9 @@ const Index = () => {
         setTeams(users)
         setUsers(users)
       })
-      .catch(() => openSnackbar('データ取得エラー', 'error'))
+      .catch(() => snackbar.show('データ取得エラー', 'error'))
       .finally(() => setLoading(false))
   }, [])
-
-  const onCopy = () => {
-    try {
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(getCopyText())
-        openSnackbar('コピーしました', 'success')
-      } else {
-        throw new Error('お使いのブラウザにはクリップボード機能がありません。')
-      }
-    } catch (e) {
-      openSnackbar(e.message, 'error')
-    }
-  }
 
   return (
     <div className={classes.root}>
@@ -161,12 +144,7 @@ const Index = () => {
         <Paper square elevation={0} className={classes.resetContainer}>
           <Typography>卓の作成が完了しました。</Typography>
           <div className={classes.actionsContainer}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={onCopy}
-            >コピー</Button>
-            <Button onClick={onReset} variant="outlined">リセット</Button>
+            <Result onReset={onReset} />
           </div>
         </Paper>
       )}
