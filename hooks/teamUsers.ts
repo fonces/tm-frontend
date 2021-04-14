@@ -13,20 +13,23 @@ const dices = range(6, 36)
 
 const useTeamUsers = () => {
   const { teams } = useTeams()
-  const { users } = useUsers()
+  const { users, entryUsers } = useUsers()
 
   const teamUsers = useMemo(() => teams.map(team => ({
     ...team,
     users: users.filter(({ teamId }) => teamId === team.id),
-  }) as TeamUser), [teams, users])
+  })), [teams, users])
 
   const entryTeamUsers = useMemo(() => (
-    teams.map(team => ({
-      ...team,
-      users: users.filter(({ teamId, entry }) => teamId === team.id && entry),
-    }) as TeamUser)
-      .filter(({ users }) => users.length)),
-  [teams, users])
+    teams
+      .map(team => ({
+        ...team,
+        users: entryUsers.filter(({ teamId }) => teamId === team.id),
+      }))
+      .filter(({ users }) => users.length)
+    ),
+    [teams, entryUsers]
+  )
 
   const isAllSettedDice = entryTeamUsers.every(({ dice }) => !!dice)
 

@@ -8,7 +8,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import List from '@material-ui/core/List'
 
 import useTeamUsers from '@/hooks/teamUsers'
-import UserItem from '@/components/ItemUser'
+import ItemUser from '@/components/ItemUser'
 import useUsers from '@/stores/users'
 
 const useStyles = makeStyles((_: Theme) =>
@@ -48,7 +48,7 @@ const StepTeam = () => {
           </AccordionSummary>
           <AccordionDetails className={classes.accordion}>
             <List dense className={classes.root}>
-              {users.map((user) => <UserItem key={user.id} {...user} onChange={onChange} />)}
+              {users.map((user) => <ItemUser key={user.id} {...user} onChange={onChange} />)}
             </List>
           </AccordionDetails>
         </Accordion>

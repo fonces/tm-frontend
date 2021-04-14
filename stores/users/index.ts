@@ -18,7 +18,7 @@ const { loadStorage, syncStorage } = createStorageManager('users', initialState.
 
 const useUsers = () => {
   const { state, dispatch } = useContext(Context)
-  const { users, ids, byId } = selector(state)
+  const { users, entryUsers, ids, byId } = selector(state)
 
   const setUsers = (response: UserRow[]) => {
     const storageData = loadStorage()
@@ -43,6 +43,7 @@ const useUsers = () => {
 
   return {
     users,
+    entryUsers,
     ids,
     byId,
     isSelectedUsers,

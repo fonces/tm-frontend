@@ -18,17 +18,17 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 )
 
-type UserItemProps = 
+type ItemUserProps = 
   User & {
     onChange: (event: ChangeEvent<HTMLInputElement>, entry: boolean) => void
   }
 
-const UserItem = ({
+const ItemUser = ({
   id,
   name,
   entry,
   onChange,
-}: UserItemProps) => {
+}: ItemUserProps) => {
   const classes = useStyles()
   const checkboxRef = useRef<HTMLButtonElement>(null)
   const labelId = `user-checkbox-${id}`
@@ -53,9 +53,9 @@ const UserItem = ({
     </ListItem>
   )
 }
-const MemolizedUserItem = memo(
-  UserItem,
+const MemolizedItemUser = memo(
+  ItemUser,
   (prevProps, nextProps) => prevProps.entry === nextProps.entry,
 )
 
-export default MemolizedUserItem
+export default MemolizedItemUser
