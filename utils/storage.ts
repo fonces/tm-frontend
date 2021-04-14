@@ -1,9 +1,8 @@
 export const createStorageManager = <S extends object, T extends object>(
   key: string,
   initialState: S,
-  filterData: (s: S) => T = s => (s as any as T)
+  filterData: (s: S) => T = s => (s as any as T),
 ) => {
-
   const state = Object.assign({}, filterData(initialState))
 
   const loadStorage = () => {

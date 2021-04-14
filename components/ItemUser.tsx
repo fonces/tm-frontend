@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 )
 
-type ItemUserProps = 
+type ItemUserProps =
   User & {
     onChange: (event: ChangeEvent<HTMLInputElement>, entry: boolean) => void
   }

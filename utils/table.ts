@@ -68,7 +68,7 @@ export const allocation = (teams: TeamUser[], matched: Match) => {
       tables: {
         4: tables.filter(table => table <= matched[4]),
         3: tables.filter(table => matched[4] < table && table <= totalTable),
-      }
+      },
     }))
 }
 

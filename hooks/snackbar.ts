@@ -2,7 +2,6 @@ import { useSnackbar as useNotistack, VariantType } from 'notistack'
 import { wait } from '@/utils/timer'
 
 const useSnackbar = (waitMs: number = 5000) => {
-
   const { enqueueSnackbar, closeSnackbar } = useNotistack()
 
   const show = async (message: string, variant: VariantType) => {

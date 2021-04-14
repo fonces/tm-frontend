@@ -6,7 +6,8 @@
     "dev": "ENV=env next dev",
     "build": "ENV=env NEXT_PUBLIC_ENV=next_public_env next build",
     "start": "ENV=env NEXT_PUBLIC_ENV=next_public_env next start",
-    "export": "ENV=env NEXT_PUBLIC_ENV=next_public_env next export"
+    "export": "ENV=env NEXT_PUBLIC_ENV=next_public_env next export",
+    "lint": "eslint './**/*.{js,ts,tsx}' --quiet --fix"
   },
   "repository": {
     "type": "git",

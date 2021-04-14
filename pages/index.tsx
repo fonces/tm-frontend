@@ -55,7 +55,7 @@ const useStyles = makeStyles((theme: Theme) => (
 const Index = () => {
   const classes = useStyles()
   const snackbar = useSnackbar()
-  const [loading, setLoading] = useState(true)  
+  const [loading, setLoading] = useState(true)
   const { activeStep, isStepCompleted, onNext, onBack, onReset } = useStep(4)
   const { isCreatable } = useMaker()
   const { setTeams } = useTeams()

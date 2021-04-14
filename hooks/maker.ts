@@ -62,7 +62,7 @@ ${allocate.map(team => (
     `ダイス: ${teamsById[team.id].dice}`,
     team.tables[4].length && `四麻卓: ${team.tables[4].join(', ')}`,
     team.tables[3].length && `三麻卓: ${team.tables[3].join(', ')}`,
-    '------------------------------'
+    '------------------------------',
   ]
     .filter(Boolean)
     .join('\n')

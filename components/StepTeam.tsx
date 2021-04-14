@@ -26,7 +26,7 @@ const StepTeam = () => {
   const classes = useStyles()
   const { byId, updateUser } = useUsers()
   const { teamUsers } = useTeamUsers()
-  
+
   const onChange = (event: ChangeEvent<HTMLInputElement>, entry: boolean) => {
     const id = event.currentTarget!.value
     updateUser({

@@ -26,7 +26,7 @@ const StepDice = () => {
     id,
     name,
     dice,
-    labelId: `dice-label-${id}`
+    labelId: `dice-label-${id}`,
   }))
 
   const onChangeDice = (id: string) => (event: ChangeEvent<{ value: unknown }>) => {

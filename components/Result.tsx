@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   actions: {
     display: 'flex',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
 }))
 
@@ -32,7 +32,7 @@ type ResultProps = {
 }
 
 const Result = ({ onReset }: ResultProps) => {
-  const classes = useStyles();
+  const classes = useStyles()
   const snackbar = useSnackbar()
   const {
     priority,
@@ -43,7 +43,7 @@ const Result = ({ onReset }: ResultProps) => {
     getCopyText,
   } = useMaker()
   const { byId: teamsById } = useTeams()
-  
+
   const onCopy = () => {
     try {
       if (navigator.clipboard) {
@@ -83,8 +83,8 @@ const Result = ({ onReset }: ResultProps) => {
           <CardContent key={id} className={classes.nest}>
             <StyledTypography variant="body2" color="textSecondary" gutterBottom>{teamsById[id].name}チーム</StyledTypography>
             <StyledTypography variant="body2">ダイス: {teamsById[id].dice}</StyledTypography>
-            {0 < tables[4].length && <StyledTypography variant="body2">四麻卓: {tables[4].join(', ')}</StyledTypography>}
-            {0 < tables[3].length && <StyledTypography variant="body2">三麻卓: {tables[3].join(', ')}</StyledTypography>}
+            {tables[4].length > 0 && <StyledTypography variant="body2">四麻卓: {tables[4].join(', ')}</StyledTypography>}
+            {tables[3].length > 0 && <StyledTypography variant="body2">三麻卓: {tables[3].join(', ')}</StyledTypography>}
           </CardContent>
         ))}
       </CardContent>

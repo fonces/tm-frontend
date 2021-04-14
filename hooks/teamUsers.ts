@@ -1,4 +1,4 @@
-import { useMemo, useCallback, ChangeEvent } from 'react'
+import { useMemo, useCallback } from 'react'
 import { range } from '@/utils/array'
 import useTeams from '@/stores/teams'
 import { Team } from '@/stores/teams/types'
@@ -27,8 +27,8 @@ const useTeamUsers = () => {
         users: entryUsers.filter(({ teamId }) => teamId === team.id),
       }))
       .filter(({ users }) => users.length)
-    ),
-    [teams, entryUsers]
+  ),
+  [teams, entryUsers],
   )
 
   const isAllSettedDice = entryTeamUsers.every(({ dice }) => !!dice)
