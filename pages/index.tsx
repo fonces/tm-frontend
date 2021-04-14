@@ -162,6 +162,6 @@ const EnhanceIndex = () => (
       </TeamsProvider>
     </SettingsProvider>
   </SnackbarProvider>
-)
+);
 
 export default EnhanceIndex

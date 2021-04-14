@@ -7,7 +7,8 @@
     "build": "ENV=env NEXT_PUBLIC_ENV=next_public_env next build",
     "start": "ENV=env NEXT_PUBLIC_ENV=next_public_env next start",
     "export": "ENV=env NEXT_PUBLIC_ENV=next_public_env next export",
-    "lint": "eslint './**/*.{js,ts,tsx}' --quiet --fix"
+    "lint": "eslint './**/*.{js,ts,tsx}' --quiet --fix",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -45,16 +46,5 @@
     "eslint-plugin-react": "^7.23.2",
     "husky": "^6.0.0",
     "lint-staged": "^10.5.4"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "tsc --noEmit && lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.{js,ts,tsx}": [
-      "eslint --fix",
-      "git add"
-    ]
   }
 }
