@@ -3,6 +3,7 @@ import { SnackbarProvider } from 'notistack'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Backdrop from '@material-ui/core/Backdrop'
 import Button from '@material-ui/core/Button'
+import IconButton from '@material-ui/core/IconButton'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Stepper from '@material-ui/core/Stepper'
 import Step from '@material-ui/core/Step'
@@ -10,19 +11,19 @@ import StepLabel from '@material-ui/core/StepLabel'
 import StepContent from '@material-ui/core/StepContent'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
+import ArrowBackIcon from '@material-ui/icons/ArrowBack'
+import DeleteIcon from '@material-ui/icons/Delete'
 
-import getUsers from '@/api/users/GET'
+import getTeams from '@/api/teams/GET'
 import useMaker from '@/hooks/maker'
 import useSnackbar from '@/hooks/snackbar'
 import useStep from '@/hooks/step'
-import useTeamUsers from '@/hooks/teamUsers'
 import Result from '@/components/Result'
 import StepConfirm from '@/components/StepConfirm'
 import StepDice from '@/components/StepDice'
 import StepOther from '@/components/StepOther'
 import StepTeam from '@/components/StepTeam'
 import useTeams, { Provider as TeamsProvider } from '@/stores/teams'
-import useUsers, { Provider as UsersProvider } from '@/stores/users'
 import useSettings, { Provider as SettingsProvider } from '@/stores/settings'
 
 const useStyles = makeStyles((theme: Theme) => (
@@ -44,6 +45,13 @@ const useStyles = makeStyles((theme: Theme) => (
       flexDirection: 'row-reverse',
       marginTop: theme.spacing(2),
     },
+    optionsContainer: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      marginRight: -theme.spacing(1.2),
+      marginBottom: theme.spacing(1.5),
+      marginLeft: -theme.spacing(2),
+    },
     resetContainer: {
       paddingLeft: theme.spacing(3),
       paddingRight: theme.spacing(3),
@@ -58,21 +66,23 @@ const Index = () => {
   const [loading, setLoading] = useState(true)
   const { activeStep, isStepCompleted, onNext, onBack, onReset } = useStep(4)
   const { isCreatable } = useMaker()
-  const { setTeams } = useTeams()
-  const { setUsers, isSelectedUsers } = useUsers()
-  const { isAllSettedDice } = useTeamUsers()
+  const { teams, entryTeams, isAllSettedDice, setTeams, updateTeams } = useTeams()
   const { loadSettings } = useSettings()
 
   useEffect(() => {
     loadSettings()
-    getUsers()
-      .then(users => {
-        setTeams(users)
-        setUsers(users)
-      })
+    getTeams()
+      .then(setTeams)
       .catch(() => snackbar.show('データ取得エラー', 'error'))
       .finally(() => setLoading(false))
   }, [])
+
+  const onClearUsers = () => {
+    updateTeams(teams.map(team => ({ ...team, users: 0 })))
+  }
+  const onClearDices = () => {
+    updateTeams(teams.map(team => ({ ...team, dice: 0 })))
+  }
 
   return (
     <div className={classes.root}>
@@ -84,12 +94,18 @@ const Index = () => {
           <Step>
             <StepLabel>参加ユーザー設定</StepLabel>
             <StepContent>
+              <div className={classes.optionsContainer}>
+                <div />
+                <IconButton aria-label="delete" onClick={onClearUsers}>
+                  <DeleteIcon fontSize="small" />
+                </IconButton>
+              </div>
               <StepTeam />
               <div className={classes.actionsContainer}>
                 <Button
                   variant="contained"
                   color="primary"
-                  disabled={!isSelectedUsers}
+                  disabled={!entryTeams.length}
                   onClick={onNext}
                 >次へ</Button>
               </div>
@@ -98,6 +114,14 @@ const Index = () => {
           <Step>
             <StepLabel>ダイス値入力</StepLabel>
             <StepContent>
+              <div className={classes.optionsContainer}>
+                <IconButton aria-label="back" onClick={onBack}>
+                  <ArrowBackIcon fontSize="small" />
+                </IconButton>
+                <IconButton aria-label="delete" onClick={onClearDices}>
+                  <DeleteIcon fontSize="small" />
+                </IconButton>
+              </div>
               <StepDice />
               <div className={classes.actionsContainer}>
                 <Button
@@ -106,13 +130,17 @@ const Index = () => {
                   disabled={!isAllSettedDice}
                   onClick={onNext}
                 >次へ</Button>
-                <Button onClick={onBack} variant="outlined">前へ</Button>
               </div>
             </StepContent>
           </Step>
           <Step>
             <StepLabel>詳細設定</StepLabel>
             <StepContent>
+              <div className={classes.optionsContainer}>
+                <IconButton aria-label="back" onClick={onBack}>
+                  <ArrowBackIcon fontSize="small" />
+                </IconButton>
+              </div>
               <StepOther />
               <div className={classes.actionsContainer}>
                 <Button
@@ -120,13 +148,17 @@ const Index = () => {
                   color="primary"
                   onClick={onNext}
                 >次へ</Button>
-                <Button onClick={onBack} variant="outlined">前へ</Button>
               </div>
             </StepContent>
           </Step>
           <Step>
             <StepLabel>設定内容確認</StepLabel>
             <StepContent>
+              <div className={classes.optionsContainer}>
+                <IconButton aria-label="back" onClick={onBack}>
+                  <ArrowBackIcon fontSize="small" />
+                </IconButton>
+              </div>
               <StepConfirm />
               <div className={classes.actionsContainer}>
                 <Button
@@ -135,7 +167,6 @@ const Index = () => {
                   disabled={!isCreatable}
                   onClick={onNext}
                 >作成</Button>
-                <Button onClick={onBack} variant="outlined">修正</Button>
               </div>
             </StepContent>
           </Step>
@@ -156,9 +187,7 @@ const EnhanceIndex = () => (
   <SnackbarProvider maxSnack={1}>
     <SettingsProvider>
       <TeamsProvider>
-        <UsersProvider>
-          <Index />
-        </UsersProvider>
+        <Index />
       </TeamsProvider>
     </SettingsProvider>
   </SnackbarProvider>

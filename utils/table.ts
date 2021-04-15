@@ -1,4 +1,4 @@
-import { TeamUser } from '@/hooks/teamUsers'
+import { Team } from '@/stores/teams/types'
 import { Priority } from '@/stores/settings/types'
 
 export type Match = {
@@ -52,14 +52,14 @@ export const parseTables = (matched: Match) => ({
  * @param tables テーブル情報
  * @returns チームIDとテーブル番号の配列
  */
-export const allocation = (teams: TeamUser[], matched: Match) => {
+export const allocation = (teams: Team[], matched: Match) => {
   const totalTable = matched[4] + matched[3]
   const repeat = numberRepeat(totalTable)
   return teams
     .sort((a, b) => a.dice - b.dice)
     .map(({ id, users }) => ({
       id,
-      tables: [...new Array(users.length)]
+      tables: [...new Array(users)]
         .map(repeat)
         .sort((a, b) => a - b),
     }))

@@ -5,8 +5,8 @@ import MenuItem from '@material-ui/core/MenuItem'
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
 
-import useTeamUsers from '@/hooks/teamUsers'
 import useTeams from '@/stores/teams'
+import { range } from '@/utils/array'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -18,16 +18,23 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 )
 
+const dices = range(6, 36)
+
 const StepDice = () => {
   const classes = useStyles()
-  const { byId, updateTeam } = useTeams()
-  const { entryTeamUsers, narrowDices } = useTeamUsers()
-  const entries = entryTeamUsers.map(({ id, name, dice }) => ({
+  const { byId, entryTeams, updateTeam } = useTeams()
+
+  const entries = entryTeams.map(({ id, name, dice }) => ({
     id,
     name,
     dice,
     labelId: `dice-label-${id}`,
   }))
+
+  const narrowDices = (myDice: number) => {
+    const selectedDices = entryTeams.map(({ dice }) => dice)
+    return dices.filter(dice => !selectedDices.includes(dice) || dice === myDice)
+  }
 
   const onChangeDice = (id: string) => (event: ChangeEvent<{ value: unknown }>) => {
     updateTeam({

@@ -1,14 +1,12 @@
 import { useMemo } from 'react'
 
 import { PRIORITY_KANJI_MAP } from '@/helpers/consts'
-import useTeamUsers from '@/hooks/teamUsers'
 import useTeams from '@/stores/teams'
 import useSettings from '@/stores/settings'
 import { divisionNumbers, parseTables, allocation } from '@/utils/table'
 
 const useMaker = () => {
-  const { byId: teamsById } = useTeams()
-  const { entryTeamUsers } = useTeamUsers()
+  const { entryTeams, byId: teamsById } = useTeams()
   const { priority } = useSettings()
 
   const {
@@ -18,7 +16,7 @@ const useMaker = () => {
     tables,
     allocate,
   } = useMemo(() => {
-    const users = entryTeamUsers.reduce((acc, team) => acc + team.users.length, 0)
+    const users = entryTeams.reduce((acc, { users }) => acc + users, 0)
     const numbers = divisionNumbers(priority, users)
     const isCreatable = !!numbers
 
@@ -33,7 +31,7 @@ const useMaker = () => {
     }
 
     const tables = parseTables(numbers)
-    const allocate = allocation(entryTeamUsers, tables)
+    const allocate = allocation(entryTeams, tables)
 
     return {
       users,
@@ -42,7 +40,7 @@ const useMaker = () => {
       tables,
       allocate,
     }
-  }, [entryTeamUsers])
+  }, [entryTeams])
 
   const getCopyText = () => {
     if (!isCreatable) throw new Error(`${users} 全員参加できる卓数の作成ができませんでした。`)
