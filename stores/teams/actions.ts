@@ -1,4 +1,4 @@
-import { Team, TeamById } from './types'
+import { TeamById } from './types'
 
 export type Actions = 'SET'
 
@@ -10,8 +10,7 @@ export type ActionType = {
 } | {
   type: 'UPDATE',
   payload: {
-    id: string
-    team: Partial<Team>
+    byId: TeamById
   }
 }
 
@@ -20,15 +19,12 @@ const setTeams = (byId: TeamById): ActionType => ({
   payload: { byId },
 })
 
-const updateTeam = (id: string, team: Partial<Team>): ActionType => ({
+const updateTeams = (byId: TeamById): ActionType => ({
   type: 'UPDATE',
-  payload: {
-    id,
-    team,
-  },
+  payload: { byId },
 })
 
 export default {
   setTeams,
-  updateTeam,
+  updateTeams,
 }

@@ -89,7 +89,7 @@ const Index = () => {
       <Backdrop className={classes.backdrop} open={loading}>
         <CircularProgress color="inherit" />
       </Backdrop>
-      <Typography variant="h5" className={classes.title}>卓リスト作成</Typography>
+      <Typography variant="h5" className={classes.title}>団体戦卓Generator</Typography>
       <Stepper activeStep={activeStep} orientation="vertical">
           <Step>
             <StepLabel>参加ユーザー設定</StepLabel>
@@ -173,7 +173,7 @@ const Index = () => {
       </Stepper>
       {isStepCompleted && (
         <Paper square elevation={0} className={classes.resetContainer}>
-          <Typography>卓の作成が完了しました。</Typography>
+          <Typography variant="subtitle2">卓の作成が完了しました</Typography>
           <div className={classes.actionsContainer}>
             <Result onReset={onReset} />
           </div>

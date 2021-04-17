@@ -1,15 +1,18 @@
 import { useContext } from 'react'
-import { createStorageManager } from '@/utils/storage'
+
 import { TeamRow } from '@/api/teams/GET'
+import { ToById } from '@/helpers/types'
 import { Team, TeamById } from './types'
+import actions from './actions'
 import { initialState, Context } from './context'
 import selector from './selector'
-import actions from './actions'
+import { toById } from '@/utils/array'
+import { createStorageManager } from '@/utils/storage'
 
 const { loadStorage, syncStorage } = createStorageManager('teams', initialState.byId, (teamsById: TeamById) => (
   Object
     .values(teamsById)
-    .reduce<{ [key: string ]: Pick<Team, 'dice'> }>((acc, { id, dice, users }) => ({
+    .reduce<ToById<Pick<Team, 'dice' | 'users'>>>((acc, { id, dice, users }) => ({
       ...acc,
       [id]: { dice, users },
     }), {})
@@ -17,46 +20,46 @@ const { loadStorage, syncStorage } = createStorageManager('teams', initialState.
 
 const useTeams = () => {
   const { state, dispatch } = useContext(Context)
-  const { teams, entryTeams, diceSorted, isAllSettedDice, ids, byId } = selector(state)
+  const {
+    ids,
+    byId,
+    teams,
+    entryTeams,
+    allUsers,
+    diceSorted,
+    isAllSettedDice,
+  } = selector(state)
 
   const setTeams = (response: TeamRow[]) => {
     const storageData = loadStorage()
-    const teamsById = response.reduce<TeamById>((acc, { id, name }) => (
-      acc[id]
-        ? acc
-        : {
-            ...acc,
-            [id]: {
-              id,
-              name,
-              users: (storageData || {})[id]?.users || 0,
-              dice: (storageData || {})[id]?.dice || 0,
-            },
-          }
-    ), {})
+    const teamsById = response.reduce<TeamById>((acc, { id, name }) => ({
+      ...acc,
+      [id]: {
+        id,
+        name,
+        users: (storageData || {})[id]?.users || 0,
+        dice: (storageData || {})[id]?.dice || 0,
+      },
+    }), {})
     dispatch(actions.setTeams(teamsById))
   }
 
-  const updateTeam = (team: Team) => {
-    dispatch(actions.updateTeam(team.id, team))
-    syncStorage({ [team.id]: team })
-  }
-
-  const updateTeams = (teams: Team[]) => {
-    const teamsById = teams.reduce<TeamById>((acc, team) => ({ ...acc, [team.id]: team }), {})
-    dispatch(actions.setTeams(teamsById))
+  const updateTeams = (team: Team | Team[]) => {
+    const teams = Array.isArray(team) ? team : [team]
+    const teamsById = toById(teams, 'id')
+    dispatch(actions.updateTeams(teamsById))
     syncStorage({ ...teamsById })
   }
 
   return {
-    teams,
-    entryTeams,
-    diceSorted,
-    isAllSettedDice,
     ids,
     byId,
+    teams,
+    entryTeams,
+    allUsers,
+    diceSorted,
+    isAllSettedDice,
     setTeams,
-    updateTeam,
     updateTeams,
   }
 }

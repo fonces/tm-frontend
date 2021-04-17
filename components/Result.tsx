@@ -72,8 +72,8 @@ const Result = ({ onReset }: ResultProps) => {
         <StyledTypography color="primary" gutterBottom>
           卓情報
         </StyledTypography>
-        {tables[4] > 0 && <StyledTypography variant="body2">四麻卓: 1 ~ {tables[4]}卓</StyledTypography>}
-        {tables[3] > 0 && <StyledTypography variant="body2">三麻卓: {tables[4] + 1} ~ {tables[4] + tables[3]}卓</StyledTypography>}
+        {0 < tables[4] && <StyledTypography variant="body2">四麻卓: 1 ~ {tables[4]}卓</StyledTypography>}
+        {0 < tables[3] && <StyledTypography variant="body2">三麻卓: {tables[4] + 1} ~ {tables[4] + tables[3]}卓</StyledTypography>}
       </CardContent>
       <CardContent>
         <StyledTypography color="primary" gutterBottom>
@@ -83,8 +83,8 @@ const Result = ({ onReset }: ResultProps) => {
           <CardContent key={id} className={classes.nest}>
             <StyledTypography variant="body2" color="textSecondary" gutterBottom>{teamsById[id].name}チーム</StyledTypography>
             <StyledTypography variant="body2">ダイス: {teamsById[id].dice}</StyledTypography>
-            {tables[4].length > 0 && <StyledTypography variant="body2">四麻卓: {tables[4].join(', ')}</StyledTypography>}
-            {tables[3].length > 0 && <StyledTypography variant="body2">三麻卓: {tables[3].join(', ')}</StyledTypography>}
+            {0 < tables[4].length && <StyledTypography variant="body2">四麻卓: {tables[4].join(', ')}</StyledTypography>}
+            {0 < tables[3].length && <StyledTypography variant="body2">三麻卓: {tables[3].join(', ')}</StyledTypography>}
           </CardContent>
         ))}
       </CardContent>

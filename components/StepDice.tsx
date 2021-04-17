@@ -22,7 +22,7 @@ const dices = range(6, 36)
 
 const StepDice = () => {
   const classes = useStyles()
-  const { byId, entryTeams, updateTeam } = useTeams()
+  const { byId, entryTeams, updateTeams } = useTeams()
 
   const entries = entryTeams.map(({ id, name, dice }) => ({
     id,
@@ -37,7 +37,7 @@ const StepDice = () => {
   }
 
   const onChangeDice = (id: string) => (event: ChangeEvent<{ value: unknown }>) => {
-    updateTeam({
+    updateTeams({
       ...byId[id],
       dice: event.target.value as number,
     })

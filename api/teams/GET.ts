@@ -1,14 +1,11 @@
-import { createRequest, handleResponse, SSResponse } from '@/helpers/request'
+import { createRequestInit, handleResponse, SSResponse } from '@/utils/request'
 
 type Columns = 'id' | 'name'
 export type TeamRow = Record<Columns, string>
 
-const { url, options } = createRequest()
-url
-  .searchParams
-  .append('s', 'teamlist')
+const { endpoint, options } = createRequestInit({ sheet: 'teamlist' })
 
-const getTeams = () => fetch(url.toString(), options)
+const getTeams = () => fetch(endpoint, options)
   .then(res => res.json())
   .then(res => res as SSResponse<TeamRow[]>)
   .then(res => handleResponse(res))

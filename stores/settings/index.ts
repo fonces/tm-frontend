@@ -18,7 +18,7 @@ const useSettings = () => {
 
   const updateSettings = (settings: Settings) => {
     dispatch(actions.updateSettings(settings))
-    syncStorage(Object.assign(state, settings))
+    syncStorage(settings)
   }
 
   return {

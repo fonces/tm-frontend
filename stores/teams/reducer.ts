@@ -9,20 +9,11 @@ const reducer = (state: State, action: ActionType) => {
         origin: { ...action.payload.byId },
         byId: { ...action.payload.byId },
       }
-    case 'UPDATE': {
-      const { id, team } = action.payload
+    case 'UPDATE':
       return {
         ...state,
-        origin: { ...state.byId },
-        byId: {
-          ...state.byId,
-          [id]: {
-            ...state.byId[id],
-            ...team,
-          },
-        },
+        byId: { ...state.byId, ...action.payload.byId },
       }
-    }
     default:
       return state
   }

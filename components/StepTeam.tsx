@@ -16,10 +16,10 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const StepTeam = () => {
   const classes = useStyles()
-  const { teams, byId, updateTeam } = useTeams()
+  const { teams, byId, updateTeams } = useTeams()
 
   const onChange = (id: string) => (event: ChangeEvent<HTMLInputElement>) => {
-    updateTeam({
+    updateTeams({
       ...byId[id],
       users: +event.currentTarget!.value,
     })

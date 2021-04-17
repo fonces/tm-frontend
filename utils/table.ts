@@ -5,14 +5,10 @@ export type Match = {
   4: number
   3: number
 }
-export type Table = {
-  4: number
-  3: number
-}
 
 /**
  * 総人数から4麻・3麻の人数を算出する
- * @param weight 4麻・3麻どちらを多めに作成するか
+ * @param priority 4麻・3麻どちらを多めに作成するか
  * @param numbers 総人数
  * @returns Match型のObject
  */

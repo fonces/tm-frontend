@@ -1,3 +1,10 @@
+/**
+ * localStorageにObjectを保存する
+ * @param key ストレージキー
+ * @param initialState 初期ステート
+ * @param filterData 登録するデータのフィルタリング関数
+ * @returns 読み込みと同期を行う関数を返却
+ */
 export const createStorageManager = <S extends object, T extends object>(
   key: string,
   initialState: S,
