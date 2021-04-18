@@ -1,7 +1,7 @@
 import { DetailedHTMLProps, LinkHTMLAttributes } from 'react'
 import path from 'path'
 
-const basePath = process.env.basePath || ''
+const BASE_PATH = process.env.basePath || ''
 
 type EnhanceLinkProps = Omit<
   DetailedHTMLProps<LinkHTMLAttributes<HTMLLinkElement>, HTMLLinkElement>,
@@ -10,8 +10,9 @@ type EnhanceLinkProps = Omit<
   href: string
 }
 
-const Link = ({ href, ...rest }: EnhanceLinkProps) => (
-  <link {...rest} href={path.join(href.startsWith('http') ? '' : basePath, href)} />
-)
+const Link = ({ href, ...rest }: EnhanceLinkProps) => {
+  const pathPrefix = href.startsWith('http') || href.startsWith('//') ? '' : BASE_PATH
+  return <link {...rest} href={path.join(pathPrefix, href)} />
+}
 
 export default Link

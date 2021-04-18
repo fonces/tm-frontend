@@ -20,7 +20,7 @@ export default class MyDocument extends Document {
           <meta name="msapplication-TileColor" content="#da532c" />
           <meta name="theme-color" content="#ffffff" />
           <Link rel="manifest" href="/manifest.json" />
-          <Link
+          <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/earlyaccess/notosansjapanese.css"
           />
