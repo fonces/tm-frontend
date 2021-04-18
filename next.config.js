@@ -4,10 +4,8 @@ const path = require('path')
 const BASE_PATH = process.env.GITHUB_PAGES ? '/tm-frontend' : ''
 
 module.exports = withPWA({
+  basePath: BASE_PATH,
   assetPrefix: BASE_PATH,
-  env: {
-    basePath: BASE_PATH,
-  },
   pwa: {
     dest: 'public',
     disable: process.env.NODE_ENV === 'development',
