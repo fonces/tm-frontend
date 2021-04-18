@@ -10,7 +10,10 @@ module.exports = withPWA({
     dest: 'public',
     disable: process.env.NODE_ENV === 'development',
   },
-  webpack (config, options) {
+  env: {
+    basePath: BASE_PATH,
+  },
+  webpack (config) {
     config.resolve.alias['@'] = path.join(__dirname, './')
     return config
   },
