@@ -3,6 +3,7 @@ import Document, { Html, Head, Main, NextScript } from 'next/document'
 import { ServerStyleSheets } from '@material-ui/core/styles'
 
 import theme from '@/styles/theme'
+import { toPublicPath } from '@/utils/string'
 
 export default class MyDocument extends Document {
   render () {
@@ -12,11 +13,11 @@ export default class MyDocument extends Document {
           {/* PWA primary color */}
           <meta name="theme-color" content={theme.palette.primary.main} />
           <meta name="robots" content="noindex" />
-          <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
-          <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
-          <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />
-          <link rel="manifest" href="/favicon/site.webmanifest" />
-          <link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5" />
+          <link rel="apple-touch-icon" sizes="180x180" href={toPublicPath('/favicon/apple-touch-icon.png')} />
+          <link rel="icon" type="image/png" sizes="32x32" href={toPublicPath('/favicon/favicon-32x32.png')} />
+          <link rel="icon" type="image/png" sizes="16x16" href={toPublicPath('/favicon/favicon-16x16.png')} />
+          <link rel="manifest" href={toPublicPath('/favicon/site.webmanifest')} />
+          <link rel="mask-icon" href={toPublicPath('/favicon/safari-pinned-tab.svg')} color="#5bbad5" />
           <meta name="msapplication-TileColor" content="#da532c" />
           <meta name="theme-color" content="#ffffff" />
           <link
