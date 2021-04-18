@@ -1,13 +1,5 @@
 import { Children } from 'react'
-import Document, {
-  Html,
-  Head,
-  Body,
-  Main,
-  Meta,
-  Link,
-  NextScript,
-} from 'next/document'
+import Document, { Html, Head, Main, NextScript } from 'next/document'
 import { ServerStyleSheets } from '@material-ui/core/styles'
 
 import theme from '@/styles/theme'
@@ -18,24 +10,24 @@ export default class MyDocument extends Document {
       <Html lang="ja">
         <Head>
           {/* PWA primary color */}
-          <Meta name="theme-color" content={theme.palette.primary.main} />
-          <Meta name="robots" content="noindex" />
-          <Link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
-          <Link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
-          <Link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />
-          <Link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5" />
-          <Meta name="msapplication-TileColor" content="#da532c" />
-          <Meta name="theme-color" content="#ffffff" />
-          <Link rel="manifest" href="/manifest.json" />
-          <Link
+          <meta name="theme-color" content={theme.palette.primary.main} />
+          <meta name="robots" content="noindex" />
+          <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+          <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
+          <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />
+          <link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5" />
+          <meta name="msapplication-TileColor" content="#da532c" />
+          <meta name="theme-color" content="#ffffff" />
+          <link rel="manifest" href="/manifest.json" />
+          <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/earlyaccess/notosansjapanese.css"
           />
         </Head>
-        <Body>
+        <body>
           <Main />
           <NextScript />
-        </Body>
+        </body>
       </Html>
     )
   }
