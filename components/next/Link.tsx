@@ -11,7 +11,7 @@ type EnhanceLinkProps = Omit<
 }
 
 const Link = ({ href, ...rest }: EnhanceLinkProps) => (
-  <link {...rest} href={path.join(basePath, href)} />
+  <link {...rest} href={path.join(href.startsWith('http') ? '' : basePath, href)} />
 )
 
 export default Link

@@ -2,7 +2,7 @@
   "name": "友人戦卓Generator",
   "short_name": "卓Gene",
   "description": "友人戦の卓リストを作成するジェネレータ",
-  "start_url": "/",
+  "start_url": "/tm-frontend",
   "display": "standalone",
   "orientation": "any",
   "background_color": "#fff",
