@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { SnackbarProvider } from 'notistack'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 import Backdrop from '@material-ui/core/Backdrop'
@@ -15,6 +15,7 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import DeleteIcon from '@material-ui/icons/Delete'
 
 import getTeams from '@/api/teams/GET'
+import useLoading from '@/hooks/loading'
 import useMaker from '@/hooks/maker'
 import useSnackbar from '@/hooks/snackbar'
 import useStep from '@/hooks/step'
@@ -63,7 +64,7 @@ const useStyles = makeStyles((theme: Theme) => (
 const Index = () => {
   const classes = useStyles()
   const snackbar = useSnackbar()
-  const [loading, setLoading] = useState(true)
+  const loading = useLoading({ immediate: true })
   const { activeStep, isStepCompleted, onNext, onBack, onReset } = useStep(4)
   const { isCreatable } = useMaker()
   const { teams, entryTeams, isAllSettedDice, setTeams, updateTeams } = useTeams()
@@ -74,7 +75,7 @@ const Index = () => {
     getTeams()
       .then(setTeams)
       .catch(() => snackbar.show('データ取得エラー', 'error'))
-      .finally(() => setLoading(false))
+      .finally(() => loading.end())
   }, [])
 
   const onClearUsers = () => {
@@ -86,7 +87,7 @@ const Index = () => {
 
   return (
     <div className={classes.root}>
-      <Backdrop className={classes.backdrop} open={loading}>
+      <Backdrop className={classes.backdrop} open={loading.now}>
         <CircularProgress color="inherit" />
       </Backdrop>
       <Typography variant="h5" className={classes.title}>団体戦卓Generator</Typography>
