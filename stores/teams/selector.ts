@@ -7,7 +7,7 @@ const selector = ({ byId }: State) => useMemo(() => {
   const teams = ids.map(id => ({ ...byId[id] }))
   const entryTeams = teams.filter(({ users }) => 0 < users)
   const sortedTeams = Object.values(
-    entryTeams
+    [...entryTeams]
       .sort((a, b) => a.dice - b.dice)
       .reduce<{ [key: string]: Team[]}>((acc, team) => ({
         ...acc,
