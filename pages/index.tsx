@@ -91,85 +91,85 @@ const Index = () => {
       </Backdrop>
       <Typography variant="h5" className={classes.title}>団体戦卓Generator</Typography>
       <Stepper activeStep={activeStep} orientation="vertical">
-          <Step>
-            <StepLabel>参加ユーザー設定</StepLabel>
-            <StepContent>
-              <div className={classes.optionsContainer}>
-                <div />
-                <IconButton aria-label="delete" onClick={onClearUsers}>
-                  <DeleteIcon fontSize="small" />
-                </IconButton>
-              </div>
-              <StepTeam />
-              <div className={classes.actionsContainer}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  disabled={!entryTeams.length}
-                  onClick={onNext}
-                >次へ</Button>
-              </div>
-            </StepContent>
-          </Step>
-          <Step>
-            <StepLabel>ダイス値入力</StepLabel>
-            <StepContent>
-              <div className={classes.optionsContainer}>
-                <IconButton aria-label="back" onClick={onBack}>
-                  <ArrowBackIcon fontSize="small" />
-                </IconButton>
-                <IconButton aria-label="delete" onClick={onClearDices}>
-                  <DeleteIcon fontSize="small" />
-                </IconButton>
-              </div>
-              <StepDice />
-              <div className={classes.actionsContainer}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  disabled={!isAllSettedDice}
-                  onClick={onNext}
-                >次へ</Button>
-              </div>
-            </StepContent>
-          </Step>
-          <Step>
-            <StepLabel>詳細設定</StepLabel>
-            <StepContent>
-              <div className={classes.optionsContainer}>
-                <IconButton aria-label="back" onClick={onBack}>
-                  <ArrowBackIcon fontSize="small" />
-                </IconButton>
-              </div>
-              <StepOther />
-              <div className={classes.actionsContainer}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={onNext}
-                >次へ</Button>
-              </div>
-            </StepContent>
-          </Step>
-          <Step>
-            <StepLabel>設定内容確認</StepLabel>
-            <StepContent>
-              <div className={classes.optionsContainer}>
-                <IconButton aria-label="back" onClick={onBack}>
-                  <ArrowBackIcon fontSize="small" />
-                </IconButton>
-              </div>
-              <StepConfirm />
-              <div className={classes.actionsContainer}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  disabled={!isCreatable}
-                  onClick={onNext}
-                >作成</Button>
-              </div>
-            </StepContent>
-          </Step>
+        <Step>
+          <StepLabel>参加ユーザー設定</StepLabel>
+          <StepContent>
+            <div className={classes.optionsContainer}>
+              <div />
+              <IconButton aria-label="delete" onClick={onClearUsers}>
+                <DeleteIcon fontSize="small" />
+              </IconButton>
+            </div>
+            <StepTeam />
+            <div className={classes.actionsContainer}>
+              <Button
+                variant="contained"
+                color="primary"
+                disabled={!entryTeams.length}
+                onClick={onNext}
+              >次へ</Button>
+            </div>
+          </StepContent>
+        </Step>
+        <Step>
+          <StepLabel>ダイス値入力</StepLabel>
+          <StepContent>
+            <div className={classes.optionsContainer}>
+              <IconButton aria-label="back" onClick={onBack}>
+                <ArrowBackIcon fontSize="small" />
+              </IconButton>
+              <IconButton aria-label="delete" onClick={onClearDices}>
+                <DeleteIcon fontSize="small" />
+              </IconButton>
+            </div>
+            <StepDice />
+            <div className={classes.actionsContainer}>
+              <Button
+                variant="contained"
+                color="primary"
+                disabled={!isAllSettedDice}
+                onClick={onNext}
+              >次へ</Button>
+            </div>
+          </StepContent>
+        </Step>
+        <Step>
+          <StepLabel>詳細設定</StepLabel>
+          <StepContent>
+            <div className={classes.optionsContainer}>
+              <IconButton aria-label="back" onClick={onBack}>
+                <ArrowBackIcon fontSize="small" />
+              </IconButton>
+            </div>
+            <StepOther />
+            <div className={classes.actionsContainer}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={onNext}
+              >次へ</Button>
+            </div>
+          </StepContent>
+        </Step>
+        <Step>
+          <StepLabel>設定内容確認</StepLabel>
+          <StepContent>
+            <div className={classes.optionsContainer}>
+              <IconButton aria-label="back" onClick={onBack}>
+                <ArrowBackIcon fontSize="small" />
+              </IconButton>
+            </div>
+            <StepConfirm />
+            <div className={classes.actionsContainer}>
+              <Button
+                variant="contained"
+                color="primary"
+                disabled={!isCreatable}
+                onClick={onNext}
+              >作成</Button>
+            </div>
+          </StepContent>
+        </Step>
       </Stepper>
       {isStepCompleted && (
         <Paper square elevation={0} className={classes.resetContainer}>
