@@ -8,6 +8,7 @@ const basicStyles = {
   lineHeight: 1.6,
   fontSize: '18px',
 }
+const baseColor = '#F5F5F5'
 
 // Create a theme instance.
 const theme = createMuiTheme({
@@ -25,19 +26,24 @@ const theme = createMuiTheme({
         },
       },
     },
+    MuiPaper: {
+      root: {
+        backgroundColor: baseColor,
+      },
+    },
   },
   palette: {
     primary: {
-      main: '#556cd6',
+      main: '#A0113E',
     },
     secondary: {
-      main: '#19857b',
+      main: '#F05352',
     },
     error: {
       main: red.A400,
     },
     background: {
-      default: '#fff',
+      default: baseColor,
     },
   },
 })

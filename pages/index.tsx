@@ -10,7 +10,6 @@ import Step from '@material-ui/core/Step'
 import StepLabel from '@material-ui/core/StepLabel'
 import StepContent from '@material-ui/core/StepContent'
 import Paper from '@material-ui/core/Paper'
-import Typography from '@material-ui/core/Typography'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import DeleteIcon from '@material-ui/icons/Delete'
 
@@ -20,6 +19,7 @@ import useMaker from '@/hooks/maker'
 import useSnackbar from '@/hooks/snackbar'
 import useStep from '@/hooks/step'
 import Result from '@/components/Result'
+import AppBar from '@/components/AppBar'
 import StepConfirm from '@/components/StepConfirm'
 import StepDice from '@/components/StepDice'
 import StepOther from '@/components/StepOther'
@@ -90,7 +90,7 @@ const Index = () => {
       <Backdrop className={classes.backdrop} open={loading.now}>
         <CircularProgress color="inherit" />
       </Backdrop>
-      <Typography variant="h5" className={classes.title}>団体戦卓Generator</Typography>
+      <AppBar />
       <Stepper activeStep={activeStep} orientation="vertical">
         <Step>
           <StepLabel>参加ユーザー設定</StepLabel>
@@ -174,7 +174,6 @@ const Index = () => {
       </Stepper>
       {isStepCompleted && (
         <Paper square elevation={0} className={classes.resetContainer}>
-          <Typography variant="subtitle2">卓の作成が完了しました</Typography>
           <div className={classes.actionsContainer}>
             <Result onReset={onReset} />
           </div>

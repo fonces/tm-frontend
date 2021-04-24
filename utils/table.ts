@@ -1,7 +1,12 @@
 import { Team } from '@/stores/teams/types'
 import { Priority } from '@/stores/settings/types'
+import { generateRepeater } from '@/utils/number'
 
 export type Match = {
+  4: number
+  3: number
+}
+export type Tables = {
   4: number
   3: number
 }
@@ -48,41 +53,22 @@ export const parseTables = (matched: Match) => ({
  * @param tables テーブル情報
  * @returns チームIDとテーブル番号の配列
  */
-export const allocation = (teams: Team[], matched: Match) => {
-  const totalTable = matched[4] + matched[3]
-  const repeat = numberRepeat(totalTable)
+export const allocation = (teams: Team[], matchedTables: Tables) => {
+  const totalTable = matchedTables[4] + matchedTables[3]
+  const repeater = generateRepeater(totalTable)
   return teams
     .sort((a, b) => a.dice - b.dice)
     .map(({ id, users }) => ({
       id,
       tables: [...new Array(users)]
-        .map(repeat)
+        .map(repeater)
         .sort((a, b) => a - b),
     }))
     .map(({ tables, ...rest }) => ({
       ...rest,
       tables: {
-        4: tables.filter(table => table <= matched[4]),
-        3: tables.filter(table => matched[4] < table && table <= totalTable),
+        4: tables.filter(table => table <= matchedTables[4]),
+        3: tables.filter(table => matchedTables[4] < table && table <= totalTable),
       },
     }))
-}
-
-/**
- * 数値をリピートする関数を作成する
- * @param max 最大値
- * @returns 数値
- */
-const numberRepeat = (max: number) => {
-  const loop = (function * () {
-    let index = 0
-    while (true) {
-      index++
-      yield index
-      if (max === index) {
-        index = 0
-      }
-    }
-  })()
-  return () => loop.next().value
 }

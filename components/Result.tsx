@@ -89,8 +89,8 @@ const Result = ({ onReset }: ResultProps) => {
         ))}
       </CardContent>
       <CardActions className={classes.actions}>
-        <Button size="small" onClick={onReset}>リセット</Button>
-        <Button size="small" variant="contained" color="primary" onClick={onCopy}>コピー</Button>
+        <Button onClick={onReset}>リセット</Button>
+        <Button variant="contained" color="primary" onClick={onCopy}>コピー</Button>
       </CardActions>
     </Card>
   )
