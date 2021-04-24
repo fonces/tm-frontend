@@ -15,6 +15,16 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'grid',
       gridRowGap: theme.spacing(2),
     },
+    row: {
+      width: '100%',
+      display: 'grid',
+      gridAutoFlow: 'column',
+      gridTemplateColumns: '1fr max-content',
+    },
+    priority: {
+      width: '60px',
+      marginLeft: theme.spacing(2),
+    },
   }),
 )
 
@@ -22,19 +32,29 @@ const dices = range(6, 36)
 
 const StepDice = () => {
   const classes = useStyles()
-  const { byId, entryTeams, updateTeams } = useTeams()
+  const {
+    byId,
+    entryTeams,
+    settedDiceTeams,
+    isButtingDice,
+    updateTeams,
+  } = useTeams()
 
-  const entries = entryTeams.map(({ id, name, dice }) => ({
+  const entries = entryTeams.map(({ id, name, dice, priority }) => ({
     id,
     name,
     dice,
-    labelId: `dice-label-${id}`,
+    priority,
+    diceLabelId: `dice-label-${id}`,
+    priorityLabelId: `priority-label-${id}`,
   }))
 
-  const narrowDices = (myDice: number) => {
-    const selectedDices = entryTeams.map(({ dice }) => dice)
-    return dices.filter(dice => !selectedDices.includes(dice) || dice === myDice)
-  }
+  const buttingCount = (currentId: string, currentDice: number) => (
+    range(
+      1,
+      settedDiceTeams.reduce((acc, { id, dice }) => acc + (id !== currentId && dice === currentDice ? 1 : 0), 1),
+    )
+  )
 
   const onChangeDice = (id: string) => (event: ChangeEvent<{ value: unknown }>) => {
     updateTeams({
@@ -43,16 +63,33 @@ const StepDice = () => {
     })
   }
 
+  const onChangePriority = (id: string) => (event: ChangeEvent<{ value: unknown }>) => {
+    updateTeams({
+      ...byId[id],
+      priority: event.target.value as number,
+    })
+  }
+
   return (
     <div className={classes.root}>
-      {entries.map(({ id, name, dice, labelId }) => (
-        <FormControl key={id}>
-          <InputLabel id={labelId}>{name}チーム</InputLabel>
-          <Select labelId={labelId} value={dice} onChange={onChangeDice(id)}>
-            <MenuItem value={0}>選択してください</MenuItem>
-            {narrowDices(dice).map(d => <MenuItem key={d} value={d}>{d}</MenuItem>)}
-          </Select>
-        </FormControl>
+      {entries.map(({ id, name, dice, priority, diceLabelId, priorityLabelId }) => (
+        <div key={id} className={classes.row}>
+          <FormControl>
+            <InputLabel id={diceLabelId}>{name}チーム</InputLabel>
+            <Select labelId={diceLabelId} value={dice} onChange={onChangeDice(id)}>
+              <MenuItem value={0}>選択してください</MenuItem>
+              {dices.map(d => <MenuItem key={d} value={d}>{d}</MenuItem>)}
+            </Select>
+          </FormControl>
+          {isButtingDice(id, dice) && (
+            <FormControl className={classes.priority}>
+              <InputLabel id={priorityLabelId}>優先度</InputLabel>
+              <Select labelId={priorityLabelId} value={priority} onChange={onChangePriority(id)}>
+                {buttingCount(id, dice).map(c => <MenuItem key={c} value={c}>{c}</MenuItem>)}
+              </Select>
+            </FormControl>
+          )}
+        </div>
       ))}
     </div>
   )

@@ -8,7 +8,7 @@ import { divisionNumbers, parseTables, allocation } from '@/utils/table'
 const separator = '------------------------------'
 
 const useMaker = () => {
-  const { entryTeams, byId: teamsById } = useTeams()
+  const { sortedTeams, byId: teamsById } = useTeams()
   const { priority } = useSettings()
 
   const {
@@ -18,7 +18,7 @@ const useMaker = () => {
     tables,
     allocate,
   } = useMemo(() => {
-    const users = entryTeams.reduce((acc, { users }) => acc + users, 0)
+    const users = sortedTeams.reduce((acc, { users }) => acc + users, 0)
     const numbers = divisionNumbers(priority, users)
     const isCreatable = !!numbers
 
@@ -33,7 +33,7 @@ const useMaker = () => {
     }
 
     const tables = parseTables(numbers)
-    const allocate = allocation(entryTeams, tables)
+    const allocate = allocation(sortedTeams, tables)
 
     return {
       users,
@@ -42,7 +42,7 @@ const useMaker = () => {
       tables,
       allocate,
     }
-  }, [entryTeams])
+  }, [sortedTeams])
 
   const getCopyText = () => {
     if (!isCreatable) throw new Error(`${users} 全員参加できる卓数の作成ができませんでした。`)

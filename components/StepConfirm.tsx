@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 const StepConfirm = () => {
   const classes = useStyles()
   const { users, tables } = useMaker()
-  const { entryTeams, diceSorted } = useTeams()
+  const { entryTeams, sortedTeams } = useTeams()
   const { priority } = useSettings()
 
   return (
@@ -49,8 +49,10 @@ const StepConfirm = () => {
           ダイス
         </StyledTypography>
         <StyledCardContent className={classes.nest}>
-          {diceSorted.map(({ id, name, dice }) => (
-            <StyledTypography key={id} variant="body2">{name}チーム : {dice.toLocaleString()}</StyledTypography>
+          {sortedTeams.map(({ id, name, dice, priority }) => (
+            <StyledTypography key={id} variant="body2">
+              {name}チーム : {dice.toLocaleString()} {priority && `優先度 : ${priority}`}
+            </StyledTypography>
           ))}
         </StyledCardContent>
       </StyledCardContent>

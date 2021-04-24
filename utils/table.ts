@@ -49,15 +49,14 @@ export const parseTables = (matched: Match) => ({
 
 /**
  * 分けた卓の番号をチームごとに返却する
- * @param teams チームリスト
+ * @param sortedTeams ソートされたチームリスト
  * @param tables テーブル情報
  * @returns チームIDとテーブル番号の配列
  */
-export const allocation = (teams: Team[], matchedTables: Tables) => {
+export const allocation = (sortedTeams: Team[], matchedTables: Tables) => {
   const totalTable = matchedTables[4] + matchedTables[3]
   const repeater = generateRepeater(totalTable)
-  return teams
-    .sort((a, b) => a.dice - b.dice)
+  return sortedTeams
     .map(({ id, users }) => ({
       id,
       tables: [...new Array(users)]

@@ -65,9 +65,22 @@ const Index = () => {
   const classes = useStyles()
   const snackbar = useSnackbar()
   const loading = useLoading({ immediate: true })
-  const { activeStep, isStepCompleted, onNext, onBack, onReset } = useStep(4)
+  const {
+    activeStep,
+    isStepCompleted,
+    onNext,
+    onBack,
+    onReset,
+  } = useStep(4)
   const { isCreatable } = useMaker()
-  const { teams, entryTeams, isAllSettedDice, setTeams, updateTeams } = useTeams()
+  const {
+    teams,
+    entryTeams,
+    isAllSettedDice,
+    isAllSettedPriority,
+    setTeams,
+    updateTeams,
+  } = useTeams()
   const { loadSettings } = useSettings()
 
   useEffect(() => {
@@ -82,7 +95,7 @@ const Index = () => {
     updateTeams(teams.map(team => ({ ...team, users: 0 })))
   }
   const onClearDices = () => {
-    updateTeams(teams.map(team => ({ ...team, dice: 0 })))
+    updateTeams(teams.map(team => ({ ...team, dice: 0, priority: 0 })))
   }
 
   return (
@@ -128,7 +141,7 @@ const Index = () => {
               <Button
                 variant="contained"
                 color="primary"
-                disabled={!isAllSettedDice}
+                disabled={!isAllSettedDice || !isAllSettedPriority}
                 onClick={onNext}
               >次へ</Button>
             </div>

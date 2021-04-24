@@ -12,9 +12,9 @@ import { createStorageManager } from '@/utils/storage'
 const { loadStorage, syncStorage } = createStorageManager('teams', initialState.byId, (teamsById: TeamById) => (
   Object
     .values(teamsById)
-    .reduce<ToById<Pick<Team, 'dice' | 'users'>>>((acc, { id, dice, users }) => ({
+    .reduce<ToById<Pick<Team, 'dice' | 'users'>>>((acc, { id, dice, users, priority }) => ({
       ...acc,
-      [id]: { dice, users },
+      [id]: { dice, users, priority },
     }), {})
 ))
 
@@ -25,9 +25,12 @@ const useTeams = () => {
     byId,
     teams,
     entryTeams,
+    sortedTeams,
+    settedDiceTeams,
     allUsers,
-    diceSorted,
     isAllSettedDice,
+    isAllSettedPriority,
+    isButtingDice,
   } = selector(state)
 
   const setTeams = (response: TeamRow[]) => {
@@ -38,6 +41,7 @@ const useTeams = () => {
         id,
         name,
         users: (storageData || {})[id]?.users || 0,
+        priority: (storageData || {})[id]?.priority || 1,
         dice: (storageData || {})[id]?.dice || 0,
       },
     }), {})
@@ -56,9 +60,12 @@ const useTeams = () => {
     byId,
     teams,
     entryTeams,
+    sortedTeams,
+    settedDiceTeams,
     allUsers,
-    diceSorted,
     isAllSettedDice,
+    isAllSettedPriority,
+    isButtingDice,
     setTeams,
     updateTeams,
   }
