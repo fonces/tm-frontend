@@ -7,7 +7,7 @@ const selector = ({ byId }: State) => useMemo(() => {
   const teams = ids.map(id => ({ ...byId[id] }))
   const allUsers = teams.reduce((acc, { users }) => acc + users, 0)
   const entryTeams = teams.filter(({ users }) => 0 < users)
-  const settedDiceTeams = entryTeams.filter(({ dice }) => !!dice)
+  const settedDiceTeams = entryTeams.filter(({ dice }) => 0 < dice)
   const sortedTeams = Object.values(
     [...entryTeams]
       .sort((a, b) => a.dice - b.dice)
@@ -25,17 +25,16 @@ const selector = ({ byId }: State) => useMemo(() => {
       .some(({ dice }) => dice === currentDice)
   )
 
-  const buttingDiceGroup = Object.values(
-    settedDiceTeams
-      .filter(({ id, dice }) => isButtingDice(id, dice))
-      .reduce<{ [key: string]: Team[]}>((acc, team) => ({
-        ...acc,
-        [team.dice]: [...(acc[team.dice] || []), team],
-      }), {}),
-  )
-
   const isAllSettedDice = entryTeams.length === settedDiceTeams.length
-  const isAllSettedPriority = buttingDiceGroup
+  const isAllSettedPriority = Object
+    .values(
+      settedDiceTeams
+        .filter(({ id, dice }) => isButtingDice(id, dice))
+        .reduce<{ [key: string]: Team[]}>((acc, team) => ({
+          ...acc,
+          [team.dice]: [...(acc[team.dice] || []), team],
+        }), {}),
+    )
     .every(group => group.every(({ id: currentId, priority: currentPriority }) => (
       group
         .filter(({ id }) => id !== currentId)

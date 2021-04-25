@@ -9,29 +9,22 @@ import selector from './selector'
 import { toById } from '@/utils/array'
 import { createStorageManager } from '@/utils/storage'
 
-const { loadStorage, syncStorage } = createStorageManager('teams', initialState.byId, (teamsById: TeamById) => (
-  Object
-    .values(teamsById)
-    .reduce<ToById<Pick<Team, 'dice' | 'users'>>>((acc, { id, dice, users, priority }) => ({
-      ...acc,
-      [id]: { dice, users, priority },
-    }), {})
-))
+const { loadStorage, syncStorage } = createStorageManager(
+  'teams',
+  initialState.byId,
+  (teamsById: TeamById) => (
+    Object
+      .values(teamsById)
+      .reduce<ToById<Pick<Team, 'dice' | 'users'>>>((acc, { id, dice, users, priority }) => ({
+        ...acc,
+        [id]: { dice, users, priority },
+      }), {})
+  ),
+)
 
 const useTeams = () => {
   const { state, dispatch } = useContext(Context)
-  const {
-    ids,
-    byId,
-    teams,
-    entryTeams,
-    sortedTeams,
-    settedDiceTeams,
-    allUsers,
-    isAllSettedDice,
-    isAllSettedPriority,
-    isButtingDice,
-  } = selector(state)
+  const teamsSelector = selector(state)
 
   const setTeams = (response: TeamRow[]) => {
     const storageData = loadStorage()
@@ -56,16 +49,7 @@ const useTeams = () => {
   }
 
   return {
-    ids,
-    byId,
-    teams,
-    entryTeams,
-    sortedTeams,
-    settedDiceTeams,
-    allUsers,
-    isAllSettedDice,
-    isAllSettedPriority,
-    isButtingDice,
+    ...teamsSelector,
     setTeams,
     updateTeams,
   }

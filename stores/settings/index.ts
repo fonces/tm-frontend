@@ -9,7 +9,7 @@ const { loadStorage, syncStorage } = createStorageManager('settings', initialSta
 
 const useSettings = () => {
   const { state, dispatch } = useContext(Context)
-  const { priority } = selector(state)
+  const settingsSelector = selector(state)
 
   const loadSettings = () => {
     const settings = loadStorage()
@@ -22,7 +22,7 @@ const useSettings = () => {
   }
 
   return {
-    priority,
+    ...settingsSelector,
     loadSettings,
     updateSettings,
   }

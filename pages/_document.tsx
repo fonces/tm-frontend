@@ -2,7 +2,6 @@ import { Children } from 'react'
 import Document, { Html, Head, Main, NextScript } from 'next/document'
 import { ServerStyleSheets } from '@material-ui/core/styles'
 
-import { IS_DEVELOPMENT } from '@/helpers/consts'
 import Link from '@/components/next/Link'
 import theme from '@/styles/theme'
 
@@ -20,7 +19,7 @@ export default class MyDocument extends Document {
           <Link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5" />
           <meta name="msapplication-TileColor" content="#da532c" />
           <meta name="theme-color" content="#ffffff" />
-          {!IS_DEVELOPMENT && <Link rel="manifest" href="/manifest.json" />}
+          {process.env.isDevelopment === 'false' && <Link rel="manifest" href="/manifest.json" />}
           <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/earlyaccess/notosansjapanese.css"

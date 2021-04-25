@@ -12,10 +12,12 @@ export const createStorageManager = <S extends object, T extends object>(
 ) => {
   const state = Object.assign({}, filterData(initialState))
 
-  const loadStorage = () => {
-    const storageData = localStorage.getItem(key)
-    return Object.assign(state, JSON.parse(storageData!))
-  }
+  const loadStorage = () => (
+    Object.assign(
+      state,
+      JSON.parse(localStorage.getItem(key)!),
+    )
+  )
 
   const syncStorage = (updateState: S) => {
     Object.assign(state, filterData(updateState))

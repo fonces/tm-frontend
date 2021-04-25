@@ -14,19 +14,19 @@ export type Tables = {
 /**
  * 総人数から4麻・3麻の人数を算出する
  * @param priority 4麻・3麻どちらを多めに作成するか
- * @param numbers 総人数
+ * @param totalUsers 総人数
  * @returns Match型のObject
  */
-export const divisionNumbers = (priority: Priority, numbers: number) => {
+export const divisionNumbers = (priority: Priority, totalUsers: number) => {
   const matched: Match[] = []
-  for (let fourBase = 0; fourBase <= numbers; fourBase += 4) {
+  for (let fourBase = 0; fourBase <= totalUsers; fourBase += 4) {
     const remainderFour = Math.round(fourBase / 4)
     const divisionFour = fourBase % 4
-    const divisionThree = (numbers - remainderFour) % 3
+    const divisionThree = (totalUsers - remainderFour) % 3
     if (divisionFour === 0 && divisionThree === 0) {
       matched.push({
         4: fourBase,
-        3: numbers - fourBase,
+        3: totalUsers - fourBase,
       })
     }
   }
@@ -50,11 +50,11 @@ export const parseTables = (matched: Match) => ({
 /**
  * 分けた卓の番号をチームごとに返却する
  * @param sortedTeams ソートされたチームリスト
- * @param tables テーブル情報
+ * @param totalTables 卓数情報
  * @returns チームIDとテーブル番号の配列
  */
-export const allocation = (sortedTeams: Team[], matchedTables: Tables) => {
-  const totalTable = matchedTables[4] + matchedTables[3]
+export const allocation = (sortedTeams: Team[], totalTables: Tables) => {
+  const totalTable = totalTables[4] + totalTables[3]
   const repeater = generateRepeater(totalTable)
   return sortedTeams
     .map(({ id, users }) => ({
@@ -66,8 +66,8 @@ export const allocation = (sortedTeams: Team[], matchedTables: Tables) => {
     .map(({ tables, ...rest }) => ({
       ...rest,
       tables: {
-        4: tables.filter(table => table <= matchedTables[4]),
-        3: tables.filter(table => matchedTables[4] < table && table <= totalTable),
+        4: tables.filter(table => table <= totalTables[4]),
+        3: tables.filter(table => totalTables[4] < table && table <= totalTable),
       },
     }))
 }
