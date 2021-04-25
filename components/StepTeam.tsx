@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react'
+import { ChangeEvent, FocusEvent } from 'react'
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 
@@ -18,6 +18,11 @@ const StepTeam = () => {
   const classes = useStyles()
   const { teams, byId, updateTeams } = useTeams()
 
+  const onFocus = (id: string) => (event: FocusEvent<HTMLInputElement>) => {
+    const team = byId[id]
+    event.currentTarget!.setSelectionRange(0, String(team.users).length)
+  }
+
   const onChange = (id: string) => (event: ChangeEvent<HTMLInputElement>) => {
     updateTeams({
       ...byId[id],
@@ -33,6 +38,7 @@ const StepTeam = () => {
           type="tel"
           label={`${name}チーム`}
           value={users}
+          onFocus={onFocus(id)}
           onChange={onChange(id)}
         />
       ))}
