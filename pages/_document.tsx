@@ -19,7 +19,7 @@ export default class MyDocument extends Document {
           <Link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5" />
           <meta name="msapplication-TileColor" content="#da532c" />
           <meta name="theme-color" content="#ffffff" />
-          {process.env.isDevelopment === 'false' && <Link rel="manifest" href="/manifest.json" />}
+          {process.env.isDevelopment !== 'true' && <Link rel="manifest" href="/manifest.json" />}
           <link
             rel="stylesheet"
             href="https://fonts.googleapis.com/earlyaccess/notosansjapanese.css"
