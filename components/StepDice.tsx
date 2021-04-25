@@ -49,10 +49,12 @@ const StepDice = () => {
     priorityLabelId: `priority-label-${id}`,
   }))
 
-  const buttingCount = (currentId: string, currentDice: number) => (
+  const createButtingCounts = (currentId: string, currentDice: number) => (
     range(
       1,
-      settedDiceTeams.reduce((acc, { id, dice }) => acc + (id !== currentId && dice === currentDice ? 1 : 0), 1),
+      settedDiceTeams
+        .filter(({ id }) => id !== currentId)
+        .reduce((acc, { dice }) => acc + (dice === currentDice ? 1 : 0), 1),
     )
   )
 
@@ -85,7 +87,7 @@ const StepDice = () => {
             <FormControl className={classes.priority}>
               <InputLabel id={priorityLabelId}>優先度</InputLabel>
               <Select labelId={priorityLabelId} value={priority} onChange={onChangePriority(id)}>
-                {buttingCount(id, dice).map(c => <MenuItem key={c} value={c}>{c}</MenuItem>)}
+                {createButtingCounts(id, dice).map(c => <MenuItem key={c} value={c}>{c}</MenuItem>)}
               </Select>
             </FormControl>
           )}

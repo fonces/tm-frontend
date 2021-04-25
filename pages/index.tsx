@@ -95,7 +95,7 @@ const Index = () => {
     updateTeams(teams.map(team => ({ ...team, users: 0 })))
   }
   const onClearDices = () => {
-    updateTeams(teams.map(team => ({ ...team, dice: 0, priority: 0 })))
+    updateTeams(teams.map(team => ({ ...team, dice: 0, priority: 1 })))
   }
 
   return (
