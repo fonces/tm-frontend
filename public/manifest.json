@@ -3,7 +3,7 @@
   "short_name": "卓Gene",
   "description": "友人戦の卓リストを作成するジェネレータ",
   "start_url": "/tm-frontend",
-  "display": "standalone",
+  "display": "fullscreen",
   "orientation": "any",
   "background_color": "#A0113E",
   "theme_color": "#A0113E",
