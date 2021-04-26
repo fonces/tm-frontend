@@ -24,9 +24,10 @@ const StepTeam = () => {
   }
 
   const onChange = (id: string) => (event: ChangeEvent<HTMLInputElement>) => {
+    const users = +event.currentTarget!.value
     updateTeams({
       ...byId[id],
-      users: +event.currentTarget!.value,
+      users: Number.isInteger(users) ? users : 0,
     })
   }
 
