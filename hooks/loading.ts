@@ -1,12 +1,10 @@
 import { useState } from 'react'
 
-const useLoading = ({
-  immediate,
-}: {
+type LoadingProps = {
   immediate: boolean
-} = {
-  immediate: false,
-}) => {
+}
+
+const useLoading = ({ immediate }: LoadingProps = { immediate: false }) => {
   const [now, setLoading] = useState(immediate)
 
   const start = () => setLoading(true)

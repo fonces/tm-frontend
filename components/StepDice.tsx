@@ -85,7 +85,7 @@ const StepDice = () => {
           </FormControl>
           {isButtingDice(id, dice) && (
             <FormControl className={classes.priority}>
-              <InputLabel id={priorityLabelId}>優先度</InputLabel>
+              <InputLabel id={priorityLabelId}>配属順</InputLabel>
               <Select labelId={priorityLabelId} value={priority} onChange={onChangePriority(id)}>
                 {createButtingCounts(id, dice).map(c => <MenuItem key={c} value={c}>{c}</MenuItem>)}
               </Select>

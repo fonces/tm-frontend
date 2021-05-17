@@ -15,9 +15,9 @@ const { loadStorage, syncStorage } = createStorageManager(
   (teamsById: TeamById) => (
     Object
       .values(teamsById)
-      .reduce<ToById<Pick<Team, 'dice' | 'users'>>>((acc, { id, dice, users, priority }) => ({
+      .reduce<ToById<Pick<Team, 'users' | 'priority' | 'dice'>>>((acc, { id, users, priority, dice }) => ({
         ...acc,
-        [id]: { dice, users, priority },
+        [id]: { users, priority, dice },
       }), {})
   ),
 )

@@ -51,7 +51,7 @@ const StepConfirm = () => {
         <StyledCardContent className={classes.nest}>
           {sortedTeams.map(({ id, name, dice, priority }) => (
             <StyledTypography key={id} variant="body2">
-              {name}チーム : {dice.toLocaleString()} {priority && `優先度 : ${priority}`}
+              {name}チーム : {dice.toLocaleString()} {priority && `配属順 : ${priority}`}
             </StyledTypography>
           ))}
         </StyledCardContent>

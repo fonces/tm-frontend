@@ -86,8 +86,8 @@ const Index = () => {
   useEffect(() => {
     loadSettings()
     getTeams()
-      .then(setTeams)
-      .catch(() => snackbar.show('データ取得エラー', 'error'))
+      .then(teams => setTeams(teams))
+      .catch(() => snackbar.error('データ取得エラー'))
       .finally(() => loading.end())
   }, [])
 

@@ -65,7 +65,9 @@ const useMaker = () => {
       ])
         .flat()
         .filter(Boolean),
-    ].join('\n')
+    ]
+      .filter(Boolean)
+      .join('\n')
   }
 
   return {

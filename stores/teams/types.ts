@@ -3,9 +3,9 @@ import { ToById } from '@/helpers/types'
 export type Team = {
   id: string
   name: string
-  dice: number
   users: number
   priority: number
+  dice: number
 }
 
 export type TeamById = ToById<Team>
