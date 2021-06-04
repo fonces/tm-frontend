@@ -85,6 +85,7 @@ const Result = ({ onReset }: ResultProps) => {
             <StyledTypography variant="body2">ダイス: {teamsById[id].dice}</StyledTypography>
             {0 < tables[4].length && <StyledTypography variant="body2">四麻卓: {tables[4].join(', ')}</StyledTypography>}
             {0 < tables[3].length && <StyledTypography variant="body2">三麻卓: {tables[3].join(', ')}</StyledTypography>}
+            <StyledTypography variant="body2">スクリーンショット枚数: {tables[4].length + (tables[3].length * 2)}</StyledTypography>
           </CardContent>
         ))}
       </CardContent>
