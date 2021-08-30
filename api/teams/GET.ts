@@ -3,7 +3,7 @@ import { createRequestInit, handleResponse, SSResponse } from '@/utils/request'
 type Columns = 'id' | 'name'
 export type TeamRow = Record<Columns, string>
 
-const { endpoint, options } = createRequestInit({ sheet: 'teamlist' })
+const { endpoint, options } = createRequestInit({ sheet: 'teams' })
 
 const getTeams = () => fetch(endpoint, options)
   .then(res => res.json())
