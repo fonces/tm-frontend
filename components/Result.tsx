@@ -1,10 +1,13 @@
+import { useState } from 'react'
 import { makeStyles, styled, Theme } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import Button from '@material-ui/core/Button'
+import ButtonGroup from '@material-ui/core/ButtonGroup'
 import Typography from '@material-ui/core/Typography'
 
+import postResult from '@/api/result/POST'
 import { PRIORITY_KANJI_MAP } from '@/helpers/consts'
 import useMaker from '@/hooks/maker'
 import useSnackbar from '@/hooks/snackbar'
@@ -43,6 +46,12 @@ const Result = ({ onReset }: ResultProps) => {
     getCopyText,
   } = useMaker()
   const { byId: teamsById } = useTeams()
+  const [posting, setPosting] = useState(false)
+
+  const onResetEnhance = () => {
+    setPosting(false)
+    onReset()
+  }
 
   const onCopy = () => {
     try {
@@ -53,8 +62,15 @@ const Result = ({ onReset }: ResultProps) => {
         throw new Error('お使いのブラウザにはクリップボード機能がありません。')
       }
     } catch (e) {
-      snackbar.error(e.message)
+      snackbar.error((e as Error).message)
     }
+  }
+
+  const onPost = () => {
+    setPosting(true)
+    postResult(getCopyText())
+      .then(() => snackbar.success('送信しました'))
+      .catch(() => snackbar.error('データ送信エラー'))
   }
 
   return (
@@ -90,8 +106,11 @@ const Result = ({ onReset }: ResultProps) => {
         ))}
       </CardContent>
       <CardActions className={classes.actions}>
-        <Button onClick={onReset}>リセット</Button>
-        <Button variant="contained" color="primary" onClick={onCopy}>コピー</Button>
+        <Button onClick={onResetEnhance}>リセット</Button>
+        <ButtonGroup variant="contained" color="primary" aria-label="outlined primary button group">
+          <Button onClick={onCopy}>コピー</Button>
+          <Button disabled={posting} onClick={onPost}>送信</Button>
+        </ButtonGroup>
       </CardActions>
     </Card>
   )

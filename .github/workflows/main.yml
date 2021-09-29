@@ -38,6 +38,7 @@ jobs:
       run: npm run build
       env:
         NEXT_PUBLIC_SS_ENDPOINT: ${{ secrets.NEXT_PUBLIC_SS_ENDPOINT }}
+        NEXT_PUBLIC_DC_ENDPOINT: ${{ secrets.NEXT_PUBLIC_DC_ENDPOINT }}
         GITHUB_PAGES: true
 
     # 静的なHTMLとしてNext.jsアプリを生成する

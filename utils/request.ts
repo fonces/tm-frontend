@@ -11,11 +11,11 @@ type RequestInitConfig = {
 }
 
 /**
- * FetchAPIで使用する引数の作成を行う
+ * SpreadSheetのFetchで使用する引数の作成を行う
  * @param param0 { sheet : 取得するシート名 }
  * @returns initパラメータ
  */
-export const createRequestInit = ({ sheet }: RequestInitConfig) => {
+export const createSSRequestInit = ({ sheet }: RequestInitConfig) => {
   const url = new URL(process.env.NEXT_PUBLIC_SS_ENDPOINT!)
   url
     .searchParams
@@ -29,11 +29,32 @@ export const createRequestInit = ({ sheet }: RequestInitConfig) => {
 }
 
 /**
+ * DiscordのFetchで使用する引数の作成を行う
+ * @returns initパラメータ
+ */
+export const createDCRequestInit = () => {
+  const url = new URL(process.env.NEXT_PUBLIC_DC_ENDPOINT!)
+  const endpoint = url.toString()
+  const options = {
+    method: 'POST',
+    mode: 'cors',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  } as const
+
+  return {
+    endpoint,
+    options,
+  }
+}
+
+/**
  * 200系レスポンスからデータを抜き出す
  * @param res レスポンス
  * @returns データ
  */
-export const handleResponse = <T>(res: SSResponse<T>) => {
+export const handleSSResponse = <T>(res: SSResponse<T>) => {
   if (res.status === 0) {
     throw new Error()
   }

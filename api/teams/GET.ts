@@ -1,13 +1,13 @@
-import { createRequestInit, handleResponse, SSResponse } from '@/utils/request'
+import { createSSRequestInit, handleSSResponse, SSResponse } from '@/utils/request'
 
 type Columns = 'id' | 'name'
 export type TeamRow = Record<Columns, string>
 
-const { endpoint, options } = createRequestInit({ sheet: 'teams' })
+const { endpoint, options } = createSSRequestInit({ sheet: 'teams' })
 
 const getTeams = () => fetch(endpoint, options)
   .then(res => res.json())
   .then(res => res as SSResponse<TeamRow[]>)
-  .then(res => handleResponse(res))
+  .then(res => handleSSResponse(res))
 
 export default getTeams
