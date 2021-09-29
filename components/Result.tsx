@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { makeStyles, styled, Theme } from '@material-ui/core/styles'
+import dayjs from 'dayjs'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
@@ -46,10 +47,10 @@ const Result = ({ onReset }: ResultProps) => {
     getCopyText,
   } = useMaker()
   const { byId: teamsById } = useTeams()
-  const [posting, setPosting] = useState(false)
+  const [posted, setPosted] = useState(false)
 
   const onResetEnhance = () => {
-    setPosting(false)
+    setPosted(false)
     onReset()
   }
 
@@ -67,8 +68,8 @@ const Result = ({ onReset }: ResultProps) => {
   }
 
   const onPost = () => {
-    setPosting(true)
-    postResult(getCopyText())
+    setPosted(true)
+    postResult(getCopyText(dayjs().format('HH:mm')))
       .then(() => snackbar.success('送信しました'))
       .catch(() => snackbar.error('データ送信エラー'))
   }
@@ -109,7 +110,7 @@ const Result = ({ onReset }: ResultProps) => {
         <Button onClick={onResetEnhance}>リセット</Button>
         <ButtonGroup variant="contained" color="primary" aria-label="outlined primary button group">
           <Button onClick={onCopy}>コピー</Button>
-          <Button disabled={posting} onClick={onPost}>送信</Button>
+          <Button disabled={posted} onClick={onPost}>送信</Button>
         </ButtonGroup>
       </CardActions>
     </Card>

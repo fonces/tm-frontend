@@ -44,7 +44,7 @@ const useMaker = () => {
     }
   }, [sortedTeams])
 
-  const getCopyText = () => {
+  const getCopyText = (timeText?: string) => {
     if (!isCreatable) throw new Error(`${users} 全員参加できる卓数の作成ができませんでした。`)
     return [
       separator,
@@ -66,6 +66,7 @@ const useMaker = () => {
       ])
         .flat()
         .filter(Boolean),
+      timeText,
     ]
       .filter(Boolean)
       .join('\n')
