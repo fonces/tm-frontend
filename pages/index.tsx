@@ -9,18 +9,15 @@ import Stepper from '@material-ui/core/Stepper'
 import Step from '@material-ui/core/Step'
 import StepLabel from '@material-ui/core/StepLabel'
 import StepContent from '@material-ui/core/StepContent'
-import Paper from '@material-ui/core/Paper'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import DeleteIcon from '@material-ui/icons/Delete'
 
 import getTeams from '@/api/teams/GET'
 import useLoading from '@/hooks/loading'
-import useMaker from '@/hooks/maker'
 import useSnackbar from '@/hooks/snackbar'
 import useStep from '@/hooks/step'
 import Result from '@/components/Result'
 import AppBar from '@/components/AppBar'
-import StepConfirm from '@/components/StepConfirm'
 import StepDice from '@/components/StepDice'
 import StepOther from '@/components/StepOther'
 import StepTeam from '@/components/StepTeam'
@@ -67,12 +64,10 @@ const Index = () => {
   const loading = useLoading({ immediate: true })
   const {
     activeStep,
-    isStepCompleted,
     onNext,
     onBack,
     onReset,
   } = useStep(4)
-  const { isCreatable } = useMaker()
   const {
     teams,
     entryTeams,
@@ -166,32 +161,12 @@ const Index = () => {
           </StepContent>
         </Step>
         <Step>
-          <StepLabel>設定内容確認</StepLabel>
+          <StepLabel>作成結果</StepLabel>
           <StepContent>
-            <div className={classes.optionsContainer}>
-              <IconButton aria-label="back" onClick={onBack}>
-                <ArrowBackIcon fontSize="small" />
-              </IconButton>
-            </div>
-            <StepConfirm />
-            <div className={classes.actionsContainer}>
-              <Button
-                variant="contained"
-                color="primary"
-                disabled={!isCreatable}
-                onClick={onNext}
-              >作成</Button>
-            </div>
+            <Result onReset={onReset} />
           </StepContent>
         </Step>
       </Stepper>
-      {isStepCompleted && (
-        <Paper square elevation={0} className={classes.resetContainer}>
-          <div className={classes.actionsContainer}>
-            <Result onReset={onReset} />
-          </div>
-        </Paper>
-      )}
     </div>
   )
 }
