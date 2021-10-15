@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import dayjs, { UnitTypeLong } from 'dayjs'
 
-type Observe = Exclude<UnitTypeLong, 'millisecond'>
-type Ignite = Partial<Record<Observe, number>>
+export type Observe = Exclude<UnitTypeLong, 'millisecond'>
+export type Ignite = Partial<Record<Observe, number>>
 
 const MIN_IGNITE_MS = 1000 as const
 const OBSERVES: Readonly<Observe[]> = [
