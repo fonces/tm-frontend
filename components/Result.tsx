@@ -1,18 +1,20 @@
 import { useState, useEffect } from 'react'
 import { makeStyles, styled, Theme } from '@material-ui/core/styles'
-import dayjs from 'dayjs'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import Button from '@material-ui/core/Button'
 import ButtonGroup from '@material-ui/core/ButtonGroup'
 import Typography from '@material-ui/core/Typography'
+import isMobile from 'ismobilejs'
+import dayjs from 'dayjs'
 
 import postResult from '@/api/result/POST'
 import { PRIORITY_KANJI_MAP } from '@/helpers/consts'
 import useClock from '@/hooks/clock'
 import useMaker from '@/hooks/maker'
 import useSnackbar from '@/hooks/snackbar'
+import useWindow from '@/hooks/window'
 import useTeams from '@/stores/teams'
 
 const StyledTypography = styled(Typography)({
@@ -38,7 +40,7 @@ type ResultProps = {
 
 const Result = ({ onReset }: ResultProps) => {
   const classes = useStyles()
-  const clock = useClock({ minutes: 0, seconds: 0 })
+  const clock = useClock({ minute: 0, second: 0 })
   const {
     priority,
     users,
@@ -50,6 +52,7 @@ const Result = ({ onReset }: ResultProps) => {
   const snackbar = useSnackbar()
   const { byId: teamsById } = useTeams()
 
+  const [reservable, setReservable] = useState(false)
   const [reserved, setReserved] = useState(false)
   const [posted, setPosted] = useState(false)
 
@@ -91,6 +94,10 @@ const Result = ({ onReset }: ResultProps) => {
     }
   }, [clock])
 
+  useWindow(() => {
+    setReservable(!isMobile().any)
+  })
+
   return (
     <Card className={classes.root} variant="outlined">
       <CardContent>
@@ -127,7 +134,7 @@ const Result = ({ onReset }: ResultProps) => {
         <Button onClick={onResetEnhance}>リセット</Button>
         <ButtonGroup variant="contained" color="primary" aria-label="outlined primary button group">
           <Button onClick={onCopy}>コピー</Button>
-          <Button disabled={posted || reserved} onClick={onReserve}>送信予約</Button>
+          {reservable && <Button disabled={posted || reserved} onClick={onReserve}>送信予約</Button>}
           <Button disabled={posted} onClick={onPost}>送信</Button>
         </ButtonGroup>
       </CardActions>
