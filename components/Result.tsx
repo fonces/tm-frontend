@@ -56,8 +56,8 @@ const Result = ({ onReset }: ResultProps) => {
   const [posted, setPosted] = useState(false)
 
   const onResetEnhance = () => {
-    setPosted(false)
     setReserved(false)
+    setPosted(false)
     onReset()
   }
 
@@ -79,15 +79,17 @@ const Result = ({ onReset }: ResultProps) => {
   }
 
   const onPost = () => {
-    setPosted(true)
     setReserved(false)
+    setPosted(true)
     postResult(getCopyText(dayjs().format('HH:mm')))
       .then(() => snackbar.success('送信しました'))
       .catch(() => snackbar.error('データ送信エラー'))
   }
 
   useTimer(() => {
-    if (reserved) onPost()
+    if (reserved) {
+      onPost()
+    }
   }, { minute: 0, second: 0 })
 
   useWindow(() => {
