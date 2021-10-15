@@ -119,7 +119,7 @@ const Index = () => {
               <Button
                 variant="contained"
                 color="primary"
-                disabled={!entryTeams.length}
+                disabled={entryTeams.length < 2}
                 onClick={onNext}
               >次へ</Button>
             </div>
