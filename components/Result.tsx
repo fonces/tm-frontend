@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { makeStyles, styled, Theme } from '@material-ui/core/styles'
 import dayjs from 'dayjs'
 import Card from '@material-ui/core/Card'
@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography'
 
 import postResult from '@/api/result/POST'
 import { PRIORITY_KANJI_MAP } from '@/helpers/consts'
+import useClock from '@/hooks/clock'
 import useMaker from '@/hooks/maker'
 import useSnackbar from '@/hooks/snackbar'
 import useTeams from '@/stores/teams'
@@ -37,7 +38,7 @@ type ResultProps = {
 
 const Result = ({ onReset }: ResultProps) => {
   const classes = useStyles()
-  const snackbar = useSnackbar()
+  const clock = useClock({ minutes: 0, seconds: 0 })
   const {
     priority,
     users,
@@ -46,11 +47,15 @@ const Result = ({ onReset }: ResultProps) => {
     allocate,
     getCopyText,
   } = useMaker()
+  const snackbar = useSnackbar()
   const { byId: teamsById } = useTeams()
+
+  const [reserved, setReserved] = useState(false)
   const [posted, setPosted] = useState(false)
 
   const onResetEnhance = () => {
     setPosted(false)
+    setReserved(false)
     onReset()
   }
 
@@ -67,12 +72,24 @@ const Result = ({ onReset }: ResultProps) => {
     }
   }
 
+  const onReserve = () => {
+    setReserved(true)
+  }
+
   const onPost = () => {
     setPosted(true)
+    setReserved(false)
     postResult(getCopyText(dayjs().format('HH:mm')))
       .then(() => snackbar.success('送信しました'))
       .catch(() => snackbar.error('データ送信エラー'))
   }
+
+  useEffect(() => {
+    if (reserved) {
+      onPost()
+      setReserved(false)
+    }
+  }, [clock])
 
   return (
     <Card className={classes.root} variant="outlined">
@@ -110,6 +127,7 @@ const Result = ({ onReset }: ResultProps) => {
         <Button onClick={onResetEnhance}>リセット</Button>
         <ButtonGroup variant="contained" color="primary" aria-label="outlined primary button group">
           <Button onClick={onCopy}>コピー</Button>
+          <Button disabled={posted || reserved} onClick={onReserve}>送信予約</Button>
           <Button disabled={posted} onClick={onPost}>送信</Button>
         </ButtonGroup>
       </CardActions>
