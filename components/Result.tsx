@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { makeStyles, styled, Theme } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
@@ -11,9 +11,9 @@ import dayjs from 'dayjs'
 
 import postResult from '@/api/result/POST'
 import { PRIORITY_KANJI_MAP } from '@/helpers/consts'
-import useClock from '@/hooks/clock'
 import useMaker from '@/hooks/maker'
 import useSnackbar from '@/hooks/snackbar'
+import useTimer from '@/hooks/timer'
 import useWindow from '@/hooks/window'
 import useTeams from '@/stores/teams'
 
@@ -40,7 +40,6 @@ type ResultProps = {
 
 const Result = ({ onReset }: ResultProps) => {
   const classes = useStyles()
-  const clock = useClock({ minute: 0, second: 0 })
   const {
     priority,
     users,
@@ -87,12 +86,9 @@ const Result = ({ onReset }: ResultProps) => {
       .catch(() => snackbar.error('データ送信エラー'))
   }
 
-  useEffect(() => {
-    if (reserved) {
-      onPost()
-      setReserved(false)
-    }
-  }, [clock])
+  useTimer(() => {
+    if (reserved) onPost()
+  }, { minute: 0, second: 0 })
 
   useWindow(() => {
     setReservable(!isMobile().any)
