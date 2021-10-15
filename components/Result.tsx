@@ -76,6 +76,7 @@ const Result = ({ onReset }: ResultProps) => {
 
   const onReserve = () => {
     setReserved(true)
+    snackbar.success('送信予約をしました')
   }
 
   const onPost = () => {
@@ -83,7 +84,7 @@ const Result = ({ onReset }: ResultProps) => {
     setPosted(true)
     postResult(getCopyText(dayjs().format('HH:mm')))
       .then(() => snackbar.success('送信しました'))
-      .catch(() => snackbar.error('データ送信エラー'))
+      .catch(() => snackbar.error('送信エラー'))
   }
 
   useTimer(() => {
