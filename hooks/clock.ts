@@ -1,29 +1,37 @@
 import { useState, useEffect } from 'react'
+import dayjs, { UnitTypeLong } from 'dayjs'
 
-type Fire = Partial<{
-  hours: number
-  minutes: number
-  seconds: number
-}>
+type Observe = Exclude<UnitTypeLong, 'millisecond'>
+type Ignite = Partial<Record<Observe, number>>
 
-/**
- * 指定した時刻になったらstateを更新する時計を作成する
- * @param fire Fire
- */
-const useClock = (fire: Fire = {}) => {
-  const [clock, setClock] = useState(new Date())
+const MIN_IGNITE_MS = 1000 as const
+const OBSERVES: Readonly<Observe[]> = [
+  'second',
+  'minute',
+  'hour',
+  'day',
+  'month',
+  'year',
+  'date',
+] as const
+
+const useClock = (ignite: Ignite = {}) => {
+  const [clock, setClock] = useState(() => dayjs())
+  const isAlwaysIgnite = Object.keys(ignite).length === 0
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      const now = new Date()
+      const now = dayjs()
       if (
-        (fire.hours === undefined || now.getHours() === fire.hours) &&
-        (fire.minutes === undefined || now.getMinutes() === fire.minutes) &&
-        (fire.seconds === undefined || now.getSeconds() === fire.seconds)
+        isAlwaysIgnite ||
+        OBSERVES.every(
+          key => ignite[key] === undefined || now[key]() === ignite[key],
+        )
       ) {
         setClock(now)
       }
-    }, 1000)
+    }, MIN_IGNITE_MS)
+
     return () => clearInterval(intervalId)
   }, [])
 
