@@ -5,6 +5,12 @@ import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import Button from '@material-ui/core/Button'
 import ButtonGroup from '@material-ui/core/ButtonGroup'
+import FileCopyIcon from '@material-ui/icons/FileCopy'
+import ReplayIcon from '@material-ui/icons/Replay'
+import IconButton from '@material-ui/core/IconButton'
+import TelegramIcon from '@material-ui/icons/Telegram'
+import TimerIcon from '@material-ui/icons/Timer'
+import Tooltip from '@material-ui/core/Tooltip'
 import Typography from '@material-ui/core/Typography'
 import isMobile from 'ismobilejs'
 import dayjs from 'dayjs'
@@ -51,6 +57,7 @@ const Result = ({ onReset }: ResultProps) => {
   const snackbar = useSnackbar()
   const { byId: teamsById } = useTeams()
 
+  const [nextHour, setNextHour] = useState('00')
   const [reservable, setReservable] = useState(false)
   const [reserved, setReserved] = useState(false)
   const [posted, setPosted] = useState(false)
@@ -87,7 +94,8 @@ const Result = ({ onReset }: ResultProps) => {
       .catch(() => snackbar.error('送信エラー'))
   }
 
-  useTimer(() => {
+  useTimer((clock) => {
+    setNextHour(clock.add(1, 'h').format('HH'))
     if (reserved) {
       onPost()
     }
@@ -130,11 +138,21 @@ const Result = ({ onReset }: ResultProps) => {
         ))}
       </CardContent>
       <CardActions className={classes.actions}>
-        <Button onClick={onResetEnhance}>リセット</Button>
+        <Tooltip placement="top" title="参加チームー設定に戻ります。自動送信予約をしている場合はキャンセルされます。">
+          <IconButton onClick={onResetEnhance}><ReplayIcon /></IconButton>
+        </Tooltip>
         <ButtonGroup variant="contained" color="primary" aria-label="outlined primary button group">
-          <Button onClick={onCopy}>コピー</Button>
-          {reservable && <Button disabled={posted || reserved} onClick={onReserve}>送信予約</Button>}
-          <Button disabled={posted} onClick={onPost}>送信</Button>
+          <Tooltip placement="top" title="クリップボードにテキストをコピーします。">
+            <Button onClick={onCopy}><FileCopyIcon /></Button>
+          </Tooltip>
+          {reservable && (
+            <Tooltip placement="top" title={`押下すると、このステップを表示している間 ${nextHour}:00 にテキストを自動送信します。`}>
+              <Button disabled={posted || reserved} onClick={onReserve}><TimerIcon /></Button>
+            </Tooltip>
+          )}
+          <Tooltip placement="top" title="Discordにテキストを送信します。">
+            <Button disabled={posted} onClick={onPost}><TelegramIcon /></Button>
+          </Tooltip>
         </ButtonGroup>
       </CardActions>
     </Card>
