@@ -101,7 +101,7 @@ const Index = () => {
       <AppBar />
       <Stepper activeStep={activeStep} orientation="vertical">
         <Step>
-          <StepLabel>参加ユーザー設定</StepLabel>
+          <StepLabel>参加チーム設定</StepLabel>
           <StepContent>
             <div className={classes.optionsContainer}>
               <div />
@@ -121,7 +121,7 @@ const Index = () => {
           </StepContent>
         </Step>
         <Step>
-          <StepLabel>ダイス値入力</StepLabel>
+          <StepLabel>ダイス値設定</StepLabel>
           <StepContent>
             <div className={classes.optionsContainer}>
               <IconButton aria-label="back" onClick={onBack}>
