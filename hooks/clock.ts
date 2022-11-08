@@ -18,6 +18,7 @@ const OBSERVES: Readonly<Observe[]> = [
 const useClock = (ignite: Ignite = {}) => {
   const [clock, setClock] = useState(() => dayjs())
   const isAlwaysIgnite = Object.keys(ignite).length === 0
+  console.log('test')
 
   useEffect(() => {
     const intervalId = setInterval(() => {
