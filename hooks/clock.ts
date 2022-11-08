@@ -15,6 +15,11 @@ const OBSERVES: Readonly<Observe[]> = [
   'date',
 ] as const
 
+/**
+ * 時間をreactiveに管理します
+ * @param ignite 発火タイミング
+ * @returns reactive object
+ */
 const useClock = (ignite: Ignite = {}) => {
   const [clock, setClock] = useState(() => dayjs())
   const isAlwaysIgnite = Object.keys(ignite).length === 0
